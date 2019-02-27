@@ -1,4 +1,4 @@
-from telethon.sync import TelegramClient, events
+from telethon.sync import TelegramClient
 import pandas as pd
 import asyncio
 
@@ -16,6 +16,7 @@ class ClientAdapter:
         self.__client.start()
 
     def __del__(self):
+        self.__client.log_out()
         self.__client.disconnect()
 
     def get_all_message_times(self, username,limit=10):
@@ -34,4 +35,4 @@ class ClientAdapter:
         df.set_index('date', drop=False, inplace=True)
         df.groupby(pd.TimeGrouper(freq='10Min')).count().plot(kind='bar')
 
-        return df.hist(bins=12)
+        return df.hist(bins=24)
