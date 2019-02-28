@@ -33,7 +33,7 @@ class ClientAdapter:
         :param int limit: The number of messages to extract information from.
 
         :return: Array of dates and times that each messages was sent.
-        :rtype: [datetime.datetimes]
+        :rtype: [datetime.datetime]
 
         >>> ca = ClientAdapter( api_id, api_hash )
         >>> ca.get_all_message_date_times('+11234567891',limit=1)
