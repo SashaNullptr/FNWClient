@@ -2,6 +2,9 @@ from telethon.sync import TelegramClient
 import pandas as pd
 import asyncio
 
+from datetime import datetime
+from dateutil import tz
+
 class ClientAdapter:
     """
     A client that connects to Telegram.
@@ -12,6 +15,9 @@ class ClientAdapter:
         self.__api_id = api_id
         self.__api_hash = api_hash
 
+        self.__from_zone = tz.tzutc()
+        self.__to_zone = tz.tzlocal()
+
         self.__client = TelegramClient('session_name', api_id, api_hash)
         self.__client.start()
 
@@ -20,12 +26,10 @@ class ClientAdapter:
         self.__client.disconnect()
 
     def get_all_message_times(self, username,limit=10):
-        return list(map( lambda x: x.date.time(), self.__client.iter_messages(username,limit=limit)))
+        return list(map( lambda x: x.date.astimezone(to_zone).time(), self.__client.iter_messages(username,limit=limit)))
 
-        # times = []
-        # for message in self.__client.iter_messages(username):
-        #     times.append(message.date.time())
-        # return await li
+    def get_all_message_date_times(self, username,limit=10):
+        return list(map( lambda x: x.date.astimezone(to_zone), self.__client.iter_messages(username,limit=limit)))
 
     def plot_message_times(self,username,limit=10):
 
