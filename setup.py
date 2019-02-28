@@ -7,6 +7,7 @@ setup(
     install_requires=['numpy',
                       'scipy',
                       'pandas',
+                      'textblob',
                       'telethon'],
     classifiers=(
         'Development Status :: 3 - Alpha',
