@@ -88,10 +88,12 @@ class ClientAdapter:
             return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", text).split())
 
         def text_sentiment(text):
-            return TextBlob(clean_text(text)).sentiment.polarity
+            clean_text = clean_text(text)
+            None if not clean_text else TextBlob(clean_text).sentiment.polarity
 
         message_iterator = self.__client.iter_messages(username,limit=limit)
-        sentiments = list(map( lambda x: text_sentiment(x.text), message_iterator))
+        return [ text_sentiment(x.text) for x in message_iterator if x is not None]
+        # sentiments = list(map( lambda x: text_sentiment(x.text), message_iterator))
 
     def message_sentiment_histogram(self,username,limit=10):
         """
