@@ -102,4 +102,18 @@ class ClientAdapter:
 
         sentiments = get_sentiments(username,limit)
         df=pd.DataFrame({'sentiment':sentiments})
-        return df[(df.T != 0)].any().hist(bin=20)
+        # Remove zero values and NAs
+        df_nz = df[(df.T != 0)].any().dropna()
+        return df_nz.hist(bin=20)
+
+    def message_sentiment_rolling_avg(self,username,limit=10):
+        """
+        Get rolling average data of all messages exchanged between you and an entity.
+        """
+
+        sentiments = get_sentiments(username,limit)
+        df=pd.DataFrame({'sentiment':sentiments})
+        # Remove zero values and NAs
+        df_nz = df[(df.T != 0)].any().dropna()
+        rolling_avg_factor = int(df_nz.shape[0]/100)+1
+        return df_nz.rolling(rolling_avg_factor).mean()
