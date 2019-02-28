@@ -33,10 +33,9 @@ class ClientAdapter:
 
     def plot_message_times(self,username,limit=10):
 
-        times=get_all_message_times(username,limit)
+        times=get_all_message_date_times(username,limit)
 
-        df = pd.DataFrame({'date':times})
-        df.set_index('date', drop=False, inplace=True)
-        df.groupby(pd.TimeGrouper(freq='10Min')).count().plot(kind='bar')
+        df = pd.DataFrame({'hour':times})
+        plot = df.groupby(df['hour'].dt.hour).count().plot(kind='bar')
 
-        return df.hist(bins=24)
+        return plot
