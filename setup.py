@@ -6,7 +6,6 @@ setup(
     packages=find_packages(exclude=[ 'docs' ]),
     install_requires=['numpy',
                       'scipy',
-                      'matplotlib',
                       'pandas',
                       'telethon'],
     classifiers=(
