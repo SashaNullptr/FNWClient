@@ -89,10 +89,10 @@ class ClientAdapter:
 
         def text_sentiment(text):
             clean_text = clean_text(text)
-            None if not clean_text else TextBlob(clean_text).sentiment.polarity
+            return None if not clean_text else TextBlob(clean_text).sentiment.polarity
 
         message_iterator = self.__client.iter_messages(username,limit=limit)
-        return [ text_sentiment(x.text) for x in message_iterator if x is not None]
+        return [ text_sentiment(x.text) for x in message_iterator if isinstance(x.text,str)]
         # sentiments = list(map( lambda x: text_sentiment(x.text), message_iterator))
 
     def message_sentiment_histogram(self,username,limit=10):
@@ -101,4 +101,5 @@ class ClientAdapter:
         """
 
         sentiments = get_sentiments(username,limit)
-        return pd.DataFrame({'sentiment':times}).groupby(df['sentiment']).count()
+        df=pd.DataFrame({'sentiment':sentiments})
+        return df[(df.T != 0)].any().hist(bin=20)
