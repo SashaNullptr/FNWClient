@@ -58,21 +58,24 @@ class ClientAdapter:
         """
         return list(map( lambda x: x.date.astimezone(to_zone).time(), self.__client.iter_messages(username,limit=limit)))
 
-    def plot_message_times(self,username,limit=10):
+    def message_time_histogram(self,username,limit=10):
         """
         Get a time histrogram for all messages exchanged between you and an entity.
 
         :param str username: Username (or phone number) of entity to get chat history from.
         :param int limit: The number of messages to extract information from.
 
+        >>> from fnw_client import ClientAdapter
+        >>> import matplotlib.pyplot as plt
+        >>>
+        >>> plt.figure()
+        >>>
         >>> ca = ClientAdapter( api_id, api_hash )
-        >>> ca.plot_message_times('+11234567891',limit=1)
-        >>> ca.plot_message_times('quartz_husky',limit=1)
+        >>> time_historgram = ca.message_time_histogram('quartz_husky',limit=100)
+        >>> time_histogram.plot(kind='bar')
+        >>>
+        >>> plt.show()
         """
 
-        times=get_all_message_date_times(username,limit)
-
-        df = pd.DataFrame({'hour':times})
-        plot = df.groupby(df['hour'].dt.hour).count().plot(kind='bar')
-
-        return plot
+        times = get_all_message_date_times(username,limit)
+        return pd.DataFrame({'hour':times}).groupby(df['hour'].dt.hour).count()
