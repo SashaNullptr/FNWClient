@@ -92,3 +92,11 @@ class ClientAdapter:
 
         message_iterator = self.__client.iter_messages(username,limit=limit)
         sentiments = list(map( lambda x: text_sentiment(x.text), message_iterator))
+
+    def message_sentiment_histogram(self,username,limit=10):
+        """
+        Get a sentiment histrogram for all messages exchanged between you and an entity.
+        """
+
+        sentiments = get_sentiments(username,limit)
+        return pd.DataFrame({'sentiment':times}).groupby(df['sentiment']).count()
