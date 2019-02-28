@@ -1,9 +1,11 @@
-from telethon.sync import TelegramClient
-import pandas as pd
 import asyncio
-
 from datetime import datetime
 from dateutil import tz
+import re
+
+from telethon.sync import TelegramClient
+import pandas as pd
+from textblob import TextBlob
 
 class ClientAdapter:
     """
@@ -79,3 +81,14 @@ class ClientAdapter:
 
         times = get_all_message_date_times(username,limit)
         return pd.DataFrame({'hour':times}).groupby(df['hour'].dt.hour).count()
+
+    def get_sentiments(self,username,limit=10):
+
+        def clean_text(text):
+            return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", text).split())
+
+        def text_sentiment(text):
+            return TextBlob(clean_text(text)).sentiment.polarity
+
+        message_iterator = self.__client.iter_messages(username,limit=limit)
+        sentiments = list(map( lambda x: text_sentiment(x.text), message_iterator))
