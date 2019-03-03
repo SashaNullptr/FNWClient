@@ -80,7 +80,8 @@ class ClientAdapter:
         """
 
         times = get_all_message_date_times(username,limit)
-        return pd.DataFrame({'hour':times}).groupby(df['hour'].dt.hour).count()
+        df = pd.DataFrame({'hour':times})
+        return df.groupby(df['hour'].dt.hour).count()
 
     def get_sentiments(self,username,limit=10):
 
@@ -88,8 +89,8 @@ class ClientAdapter:
             return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", text).split())
 
         def text_sentiment(text):
-            clean_text = clean_text(text)
-            return None if not clean_text else TextBlob(clean_text).sentiment.polarity
+            cln_text = clean_text(text)
+            return None if not cln_text else TextBlob(cln_text).sentiment.polarity
 
         message_iterator = self.__client.iter_messages(username,limit=limit)
         return [ text_sentiment(x.text) for x in message_iterator if isinstance(x.text,str)]
@@ -103,8 +104,8 @@ class ClientAdapter:
         sentiments = get_sentiments(username,limit)
         df=pd.DataFrame({'sentiment':sentiments})
         # Remove zero values and NAs
-        df_nz = df[(df.T != 0)].any().dropna()
-        return df_nz.hist(bin=20)
+        df_nz = df[(df.T != 0).any()].dropna()
+        return df_nz.hist(bins=20)
 
     def message_sentiment_rolling_avg(self,username,limit=10):
         """
