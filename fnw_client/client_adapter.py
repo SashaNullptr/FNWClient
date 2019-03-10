@@ -1,7 +1,9 @@
 import asyncio
 from datetime import datetime
 from dateutil import tz
+from itertools import groupby
 import re
+from statistics import mean
 
 from telethon.sync import TelegramClient
 import pandas as pd
@@ -41,7 +43,7 @@ class ClientAdapter:
         >>> ca.get_all_message_date_times('+11234567891',limit=1)
         >>> ca.get_all_message_date_times('quartz_husky',limit=1)
         """
-        return list(map( lambda x: x.date.astimezone(to_zone), self.__client.iter_messages(username,limit=limit)))
+        return list(map( lambda x: x.date.astimezone(self.__to_zone), self.__client.iter_messages(username,limit=limit)))
 
     def get_all_message_times(self, username,limit=10):
         """
@@ -58,7 +60,7 @@ class ClientAdapter:
         >>> ca.get_all_message_date_times('+11234567891',limit=1)
         >>> ca.get_all_message_date_times('quartz_husky',limit=1)
         """
-        return list(map( lambda x: x.date.astimezone(to_zone).time(), self.__client.iter_messages(username,limit=limit)))
+        return list(map( lambda x: x.date.astimezone(self.__to_zone).time(), self.__client.iter_messages(username,limit=limit)))
 
     def message_time_histogram(self,username,limit=10):
         """
@@ -118,3 +120,55 @@ class ClientAdapter:
         df_nz = df[(df.T != 0)].any().dropna()
         rolling_avg_factor = int(df_nz.shape[0]/100)+1
         return df_nz.rolling(rolling_avg_factor).mean()
+
+    def message_sentiment_vs_time(self,username,limit=10):
+        """
+        Get a graph of sentiment as a function of hour of the day.
+
+        :param str username: Username (or phone number) of entity to get chat history from.
+        :param int limit: The number of messages to extract information from.
+
+        >>> from fnw_client import ClientAdapter
+        >>> import matplotlib.pyplot as plt
+        >>>
+        >>> plt.figure()
+        >>>
+        >>> ca = ClientAdapter( api_id, api_hash )
+        >>> sentiment_and_time = ca.message_sentiment_and_time('quartz_husky',limit=100)
+        >>>
+        >>> plt.bar(range(len(sentiment_and_time)), [val[1] for val in sentiment_and_time], align='center')
+        >>> plt.xticks(range(len(sentiment_and_time)), [val[0] for val in sentiment_and_time])
+        >>> plt.xticks(rotation=70)
+        >>> plt.xlabel('Hour')
+        >>> plt.ylabel('Average Sentiment')
+        >>>
+        >>> plt.show()
+        """
+
+        class TimeAndSentiment:
+
+            def __init__(self,time,sentiment):
+                self.__time = time
+                self.__sentiment = sentiment
+
+            def time(self):
+                return self.__time
+
+            def sentiment(self):
+                return self.__sentiment
+
+        def get_sentiments_and_times(self,username,limit=10):
+
+            message_iterator = self.__client.iter_messages(username,limit=limit)
+
+            get_datetime = lambda x: x.date.astimezone(self.__to_zone).time()
+            get_sentiment = lambda x: self.__text_sentiment(x.text)
+
+            ts = [ TimeAndSentiment(get_datetime(x),get_sentiment(x)) for x in message_iterator if isinstance(x.text,str)]
+            # Sorted output by hours, which is necessary for groupby to work properly
+            return sorted(ts,key=lambda x: x.time().hour)
+
+        hour_group = groupby(get_sentiments_and_times(username,limit), lambda x: x.time().hour)
+        average_sentiment = lambda group : mean([ x.sentiment() for x in group if x.sentiment() is not None])
+
+        return [(key,average_sentiment(group)) for key, group in hour_group]
