@@ -83,18 +83,18 @@ class ClientAdapter:
         df = pd.DataFrame({'hour':times})
         return df.groupby(df['hour'].dt.hour).count()
 
-    def get_sentiments(self,username,limit=10):
+    def __text_sentiment(self,text):
 
-        def clean_text(text):
+        def clean_text(self,text):
             return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", text).split())
 
-        def text_sentiment(text):
-            cln_text = clean_text(text)
-            return None if not cln_text else TextBlob(cln_text).sentiment.polarity
+        cln_text = clean_text(text)
+        return None if not cln_text else TextBlob(cln_text).sentiment.polarity
+
+    def get_sentiments(self,username,limit=10):
 
         message_iterator = self.__client.iter_messages(username,limit=limit)
-        return [ text_sentiment(x.text) for x in message_iterator if isinstance(x.text,str)]
-        # sentiments = list(map( lambda x: text_sentiment(x.text), message_iterator))
+        return [ self.__text_sentiment(x.text) for x in message_iterator if isinstance(x.text,str)]
 
     def message_sentiment_histogram(self,username,limit=10):
         """
