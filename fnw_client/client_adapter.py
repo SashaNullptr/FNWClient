@@ -3,7 +3,7 @@ from datetime import datetime
 from dateutil import tz
 from itertools import groupby
 import re
-from statistics import mean
+from statistics import mean, stdev
 
 from telethon.sync import TelegramClient
 import pandas as pd
@@ -128,6 +128,9 @@ class ClientAdapter:
         :param str username: Username (or phone number) of entity to get chat history from.
         :param int limit: The number of messages to extract information from.
 
+        :return: A tuple with the following format: (hour,sentiment,variance-in-sentiment)
+        :rtype: (int,float,float)
+
         >>> from fnw_client import ClientAdapter
         >>> import matplotlib.pyplot as plt
         >>>
@@ -135,8 +138,9 @@ class ClientAdapter:
         >>>
         >>> ca = ClientAdapter( api_id, api_hash )
         >>> sentiment_and_time = ca.message_sentiment_and_time('quartz_husky',limit=100)
+        >>> variances = [ x[2] for x in sentiment_and_time ]
         >>>
-        >>> plt.bar(range(len(sentiment_and_time)), [val[1] for val in sentiment_and_time], align='center')
+        >>> plt.bar(range(len(sentiment_and_time)), [val[1] for val in sentiment_and_time], align='center',yerr=variances)
         >>> plt.xticks(range(len(sentiment_and_time)), [val[0] for val in sentiment_and_time])
         >>> plt.xticks(rotation=70)
         >>> plt.xlabel('Hour')
@@ -171,4 +175,8 @@ class ClientAdapter:
         hour_group = groupby(get_sentiments_and_times(username,limit), lambda x: x.time().hour)
         average_sentiment = lambda group : mean([ x.sentiment() for x in group if x.sentiment() is not None])
 
-        return [(key,average_sentiment(group)) for key, group in hour_group]
+        def stdev_sentiment(group):
+            clean_group = [x for x in group if x.sentiment() is not None]
+            return stdev([ x.sentiment() for x in clean_group]) if (len(clean_group) >= 2) else 0
+
+        return [(key,average_sentiment(group),stdev_sentiment(group)) for key, group in hour_group]
