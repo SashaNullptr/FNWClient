@@ -10,10 +10,12 @@ install:
 script:
     - pip install .
     - python -m sphinx -b html ./docs/source ./docs/build # Build a local version of the docs
+    - touch ./docs/build/.nojekyll
 
 deploy: # Deploy documentation to Github in the gh_pages branch
     provider: pages
-    skip_cleanup: true
+    skip-cleanup: true
+    keep-history: true
     github_token: $GITHUB_TOKEN
     local_dir: ./docs/build
     on:
