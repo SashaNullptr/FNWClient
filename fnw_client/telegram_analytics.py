@@ -9,7 +9,7 @@ from telethon.sync import TelegramClient
 import pandas as pd
 from textblob import TextBlob
 
-class ClientAdapter:
+class TelegramAnalytics:
     """
     A that extracts information about messages times.
     """
@@ -39,7 +39,7 @@ class ClientAdapter:
         :return: Array of dates and times that each messages was sent.
         :rtype: [datetime.datetime]
 
-        >>> ca = ClientAdapter( api_id, api_hash )
+        >>> ca = TelegramAnalytics( api_id, api_hash )
         >>> ca.get_all_message_date_times('+11234567891',limit=1)
         >>> ca.get_all_message_date_times('quartz_husky',limit=1)
         """
@@ -56,7 +56,7 @@ class ClientAdapter:
         :return: Array of times that each messages was sent.
         :rtype: [datetime.time]
 
-        >>> ca = ClientAdapter( api_id, api_hash )
+        >>> ca = TelegramAnalytics( api_id, api_hash )
         >>> ca.get_all_message_date_times('+11234567891',limit=1)
         >>> ca.get_all_message_date_times('quartz_husky',limit=1)
         """
@@ -69,12 +69,12 @@ class ClientAdapter:
         :param str username: Username (or phone number) of entity to get chat history from.
         :param int limit: The number of messages to extract information from.
 
-        >>> from fnw_client import ClientAdapter
+        >>> from fnw_client import TelegramAnalytics
         >>> import matplotlib.pyplot as plt
         >>>
         >>> plt.figure()
         >>>
-        >>> ca = ClientAdapter( api_id, api_hash )
+        >>> ca = TelegramAnalytics( api_id, api_hash )
         >>> time_historgram = ca.message_time_histogram('quartz_husky',limit=100)
         >>> time_histogram.plot(kind='bar')
         >>>
@@ -131,12 +131,12 @@ class ClientAdapter:
         :return: A tuple with the following format: (hour,sentiment,variance-in-sentiment)
         :rtype: (int,float,float)
 
-        >>> from fnw_client import ClientAdapter
+        >>> from fnw_client import TelegramAnalytics
         >>> import matplotlib.pyplot as plt
         >>>
         >>> plt.figure()
         >>>
-        >>> ca = ClientAdapter( api_id, api_hash )
+        >>> ca = TelegramAnalytics( api_id, api_hash )
         >>> sentiment_and_time = ca.message_sentiment_and_time('quartz_husky',limit=100)
         >>> variances = [ x[2] for x in sentiment_and_time ]
         >>>
