@@ -1,0 +1,20 @@
+language: python # Set the build language to Python
+
+python: 3.6.7 # Set the version of Python to use
+
+branches: master # Set the branch to build from
+
+install:
+    - pip install sphinx # Install the required dependencies
+
+script:
+    - pin install .
+    - python -m sphinx -b html ./docs/source ./docs/build # Build a local version of the docs
+
+deploy: # Deploy documentation to Github in the gh_pages branch
+    provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    local_dir: ./docs/build
+    on:
+branch: master
