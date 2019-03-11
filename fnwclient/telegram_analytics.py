@@ -121,6 +121,22 @@ class TelegramAnalytics:
         rolling_avg_factor = int(df_nz.shape[0]/100)+1
         return df_nz.rolling(rolling_avg_factor).mean()
 
+    class TimeSentimentVariance:
+
+        def __init__(self,time,sentiment,variance):
+            self.__time = time
+            self.__sentiment = sentiment
+            self.__variance = variance
+
+        def time(self):
+            return self.__time
+
+        def sentiment(self):
+            return self.__sentiment
+
+        def variance(self):
+            return self.__variance
+
     def message_sentiment_vs_time(self,username,limit=10):
         """
         Get a graph of sentiment as a function of hour of the day.
@@ -138,10 +154,10 @@ class TelegramAnalytics:
         >>>
         >>> ca = TelegramAnalytics( api_id, api_hash )
         >>> sentiment_and_time = ca.message_sentiment_and_time('quartz_husky',limit=100)
-        >>> variances = [ x[2] for x in sentiment_and_time ]
+        >>> variances = [ x.variance() for x in sentiment_and_time ]
         >>>
-        >>> plt.bar(range(len(sentiment_and_time)), [val[1] for val in sentiment_and_time], align='center',yerr=variances)
-        >>> plt.xticks(range(len(sentiment_and_time)), [val[0] for val in sentiment_and_time])
+        >>> plt.bar(range(len(sentiment_and_time)), [val.sentiment() for val in sentiment_and_time], align='center',yerr=variances)
+        >>> plt.xticks(range(len(sentiment_and_time)), [val.time() for val in sentiment_and_time])
         >>> plt.xticks(rotation=70)
         >>> plt.xlabel('Hour')
         >>> plt.ylabel('Average Sentiment')
@@ -179,4 +195,4 @@ class TelegramAnalytics:
             clean_group = [x for x in group if x.sentiment() is not None]
             return stdev([ x.sentiment() for x in clean_group]) if (len(clean_group) >= 2) else 0
 
-        return [(key,average_sentiment(group),stdev_sentiment(group)) for key, group in hour_group]
+        return [TimeSentimentVariance(key,average_sentiment(group),stdev_sentiment(group)) for key, group in hour_group]
