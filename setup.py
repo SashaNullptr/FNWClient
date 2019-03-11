@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='fnw_client',
+    name='fnwclient',
     version='0.1.0',
     packages=find_packages(exclude=[ 'docs' ]),
     install_requires=['numpy',
