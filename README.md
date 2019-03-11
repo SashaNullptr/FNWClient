@@ -1,5 +1,7 @@
 # FNW (Fox n' Wolf) Client
 
+[build-badge](https://travis-ci.org/SashaNullptr/FNWClient.svg?branch=master)
+
 ## What is this project?
 
 A Telegram client app to run analytics on my conversations with people
