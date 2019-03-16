@@ -8,7 +8,9 @@ setup(
                       'scipy',
                       'pandas',
                       'textblob',
-                      'telethon'],
+                      'telethon',
+                      'flask',
+                      'flask_cors'],
     classifiers=(
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
