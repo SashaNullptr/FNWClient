@@ -9,6 +9,8 @@ from telethon.sync import TelegramClient
 import pandas as pd
 from textblob import TextBlob
 
+from fnwclient.time_sentiment_vairance import TimeSentimentVariance
+
 class TelegramAnalytics:
     """
     A that extracts information about messages times.
@@ -120,22 +122,6 @@ class TelegramAnalytics:
         df_nz = df[(df.T != 0)].any().dropna()
         rolling_avg_factor = int(df_nz.shape[0]/100)+1
         return df_nz.rolling(rolling_avg_factor).mean()
-
-    class TimeSentimentVariance:
-
-        def __init__(self,time,sentiment,variance):
-            self.__time = time
-            self.__sentiment = sentiment
-            self.__variance = variance
-
-        def time(self):
-            return self.__time
-
-        def sentiment(self):
-            return self.__sentiment
-
-        def variance(self):
-            return self.__variance
 
     def message_sentiment_vs_time(self,username,limit=10):
         """
