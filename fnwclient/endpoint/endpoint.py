@@ -6,8 +6,10 @@ from flask import Blueprint, request, Response, jsonify
 from injector import inject
 
 # Local
+from fnwclient.lib import TelegramAnalytics
 
-blueprint = Blueprint('faces', __name__)
+
+blueprint = Blueprint('fnwclient', __name__)
 
 @blueprint.route('/health', methods=['GET'])
 @inject
