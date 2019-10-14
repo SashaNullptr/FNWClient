@@ -21,7 +21,7 @@ container_deps()
 load("@io_bazel_rules_docker//container:container.bzl","container_pull")
 
 container_pull(
-  name = "python_3_5_image_base",
+  name = "python_3_5_image",
   registry = "gcr.io",
   repository = "distroless/python3",
   digest = "sha256:9efd7c54d622c1b53a151456527749dd67dbe18ac8d69ac91639509c479abe12", # built on /9/6/2019
