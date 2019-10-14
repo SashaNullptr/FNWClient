@@ -1,0 +1,7 @@
+numpy
+scipy
+pandas
+textblob
+telethon
+flask
+flask_cors
