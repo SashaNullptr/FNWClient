@@ -1,6 +1,6 @@
-import os
+from flask import Flask, json
+from fnw_client.endpoint import blueprint
 
-from .telegram_analytics import TelegramAnalytics
+app = Flask(__name__)
 
-# from nltk import data
-# data.path.append( os.path.join( ROOT_DIR, 'nltk_data' ) )
+app.register_blueprint(blueprint)
