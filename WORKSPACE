@@ -46,3 +46,5 @@ pip_repository(
     python_interpreter = "python3",
     requirements = "//thirdparty/dependencies:requirements.txt",
 )
+
+register_toolchains("//bazel/ubuntu_18_04_py_runtime:ubuntu_18_04_toolchain")
