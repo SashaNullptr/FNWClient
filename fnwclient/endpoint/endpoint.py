@@ -7,7 +7,7 @@ from injector import inject
 
 # Local
 
-blueprint = Blueprint('faces', __name__)
+blueprint = Blueprint('fnwclient', __name__)
 
 @blueprint.route('/healthz', methods=['GET'])
 @inject
