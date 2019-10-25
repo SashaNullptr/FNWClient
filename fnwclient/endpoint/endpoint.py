@@ -9,7 +9,7 @@ from injector import inject
 
 blueprint = Blueprint('faces', __name__)
 
-@blueprint.route('/health', methods=['GET'])
+@blueprint.route('/healthz', methods=['GET'])
 @inject
 def example_endpoint( event=None, context=None ):
     """
