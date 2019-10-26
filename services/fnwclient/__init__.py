@@ -1,7 +1,6 @@
 from flask import Flask
 
-from FNWClient.fnwclient.endpoint.endpoint import blueprint
+from services.fnwclient.backend import blueprint
 
 app = Flask(__name__)
-
 app.register_blueprint(blueprint)

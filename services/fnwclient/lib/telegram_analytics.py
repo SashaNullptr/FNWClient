@@ -9,7 +9,7 @@ from telethon.sync import TelegramClient
 import pandas as pd
 from textblob import TextBlob
 
-from fnwclient.time_sentiment_vairance import TimeSentimentVariance
+from services.time_sentiment_vairance import TimeSentimentVariance
 
 class TelegramAnalytics:
     """
