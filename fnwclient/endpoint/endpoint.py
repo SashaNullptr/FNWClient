@@ -11,7 +11,7 @@ blueprint = Blueprint('fnwclient', __name__)
 
 @blueprint.route('/healthz', methods=['GET'])
 @inject
-def example_endpoint( event=None, context=None ):
+def health_check( event=None, context=None ):
     """
     Healthcheck for the service
 
