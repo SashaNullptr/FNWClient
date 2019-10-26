@@ -29,7 +29,6 @@ py3_image(
     base = "python_3_5_image",
     main = "server.py",
     visibility = ["//visibility:public"],
-    python_version = "PY3",
     deps = [":fnwclient"],
 )
 
