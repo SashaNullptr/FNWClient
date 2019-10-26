@@ -17,6 +17,7 @@ py_library(
       "@fnwclient_deps//flask",
       "@fnwclient_deps//flask_cors",
       "@fnwclient_deps//waitress",
+      "@fnwclient_deps//prometheus_client",
     ],
 )
 
