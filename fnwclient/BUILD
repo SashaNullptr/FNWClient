@@ -26,7 +26,7 @@ load("@io_bazel_rules_docker//python3:image.bzl", "py3_image")
 py3_image(
     name = "server",
     srcs = ["server.py"],
-    base = "python_3_5_image",
+    base = "@python_3_5_image//image",
     main = "server.py",
     visibility = ["//visibility:public"],
     deps = [":fnwclient"],
