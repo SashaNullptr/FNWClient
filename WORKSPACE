@@ -13,6 +13,7 @@ load(
     "@io_bazel_rules_docker//repositories:repositories.bzl",
     container_repositories = "repositories",
 )
+
 container_repositories()
 
 load("@io_bazel_rules_docker//repositories:deps.bzl", container_deps = "deps")
@@ -47,4 +48,4 @@ pip_repository(
     requirements = "//thirdparty/dependencies:requirements.txt",
 )
 
-register_toolchains("//bazel/ubuntu_18_04_py_runtime:ubuntu_18_04_toolchain")
+register_toolchains("//thirdparty/ubuntu_18_04_py_runtime:ubuntu_18_04_toolchain")
