@@ -5,7 +5,11 @@ import json
 from flask import Blueprint, request, Response, jsonify
 from injector import inject
 
+from prometheus_client import generate_latest
+
 # Local
+
+CONTENT_TYPE_LATEST = str('text/plain; version=0.0.4; charset=utf-8')
 
 blueprint = Blueprint('fnwclient', __name__)
 
@@ -30,3 +34,8 @@ def health_check( event=None, context=None ):
     """
 
     return Response( json.dumps({'healthy':True}), 200, mimetype='application/json' )
+
+@blueprint.route('/metrics', methods=['GET'])
+@inject
+def metrics():
+    return Response(generate_latest(), mimetype=CONTENT_TYPE_LATEST)
