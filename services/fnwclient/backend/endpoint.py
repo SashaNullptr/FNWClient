@@ -4,12 +4,13 @@ import json
 # Third Party
 from flask import Blueprint, request, Response, jsonify
 from injector import inject
-
-from prometheus_client import generate_latest
+from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 
 # Local
 
-CONTENT_TYPE_LATEST = str('text/plain; version=0.0.4; charset=utf-8')
+from services.fnwclient.lib import StreamingAnalytics
+
+sa = StreamingAnalytics()
 
 blueprint = Blueprint('fnwclient', __name__)
 
