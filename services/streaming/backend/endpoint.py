@@ -8,6 +8,10 @@ from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 
 # Local
 
+from services.fnwclient.lib import StreamingAnalytics
+
+sa = StreamingAnalytics()
+
 blueprint = Blueprint('fnwclient', __name__)
 
 @blueprint.route('/healthz', methods=['GET'])

@@ -1,0 +1,7 @@
+textblob
+telethon
+flask
+flask_cors
+waitress
+prometheus_client
+injector

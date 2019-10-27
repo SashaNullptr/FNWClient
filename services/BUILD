@@ -1,23 +1,20 @@
 package(default_visibility = ["//visibility:public"])
 
 py_library(
-    name = "fnwclient",
+    name = "streaming_lib",
     srcs = glob([
-        "fnwclient/*.py",
-        "fnwclient/**/*.py",
+        "streaming/*.py",
+        "streaming/**/*.py",
     ]),
     srcs_version = "PY3",
     deps = [
-      "@fnwclient_deps//numpy",
-      "@fnwclient_deps//scipy",
-      "@fnwclient_deps//pandas",
-      "@fnwclient_deps//textblob",
-      "@fnwclient_deps//injector",
-      "@fnwclient_deps//telethon",
-      "@fnwclient_deps//flask",
-      "@fnwclient_deps//flask_cors",
-      "@fnwclient_deps//waitress",
-      "@fnwclient_deps//prometheus_client",
+        "@fnw_streaming_deps//flask",
+        "@fnw_streaming_deps//flask_cors",
+        "@fnw_streaming_deps//injector",
+        "@fnw_streaming_deps//prometheus_client",
+        "@fnw_streaming_deps//telethon",
+        "@fnw_streaming_deps//textblob",
+        "@fnw_streaming_deps//waitress",
     ],
 )
 
@@ -29,7 +26,7 @@ py3_image(
     base = "//thirdparty/containers:python_3_7_image_base",
     main = "server.py",
     visibility = ["//visibility:public"],
-    deps = [":fnwclient"],
+    deps = [":streaming_lib"],
 )
 
 filegroup(
@@ -40,10 +37,10 @@ filegroup(
 load("@io_bazel_rules_docker//container:container.bzl", "container_push")
 
 container_push(
-   name = "push",
-   format = "Docker",
-   image = ":server",
-   registry = "fopshub.net",
-   repository = "/fnw_client",
-   tag = "latest",
+    name = "push",
+    format = "Docker",
+    image = ":server",
+    registry = "fopshub.net",
+    repository = "/fnw_client_stream",
+    tag = "latest",
 )

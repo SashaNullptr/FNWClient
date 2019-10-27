@@ -49,4 +49,10 @@ pip_repository(
     requirements = "//thirdparty/dependencies:requirements.txt",
 )
 
+pip_repository(
+    name = "fnw_streaming_deps",
+    python_interpreter = "python3",
+    requirements = "//services/streaming:requirements.txt",
+)
+
 register_toolchains("//thirdparty/ubuntu_18_04_py_runtime:ubuntu_18_04_toolchain")
