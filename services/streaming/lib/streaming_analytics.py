@@ -46,7 +46,7 @@ class StreamingAnalytics:
         if sentiment:
             self.__sentiment_gauge.set(sentiment)
 
-    def log_time(self, event: events.common.):
+    def log_time(self, event: events.common):
         pass
 
     def __text_sentiment(self,text):
