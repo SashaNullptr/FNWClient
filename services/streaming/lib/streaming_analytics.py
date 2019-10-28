@@ -7,6 +7,7 @@ from textblob import TextBlob
 
 from prometheus_client import Gauge, Histogram
 
+
 class StreamingAnalytics:
     """
     Log information about events as they happen
@@ -20,7 +21,7 @@ class StreamingAnalytics:
         self.__from_zone = tz.tzutc()
         self.__to_zone = tz.tzlocal()
 
-        self.__client = TelegramClient('session_name', api_id, api_hash, update_workers=1, spawn_read_thread=False)
+        self.__client = TelegramClient('session_name', api_id, api_hash)
 
         self.__client.add_event_handler(self.log_sentiment, events.NewMessage())
         self.__client.add_event_handler(self.log_time, events.NewMessage())
