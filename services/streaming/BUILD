@@ -12,6 +12,7 @@ py_library(
         "@fnw_streaming_deps//flask_cors",
         "@fnw_streaming_deps//injector",
         "@fnw_streaming_deps//prometheus_client",
+        "@fnw_streaming_deps//python_dateutil",
         "@fnw_streaming_deps//telethon",
         "@fnw_streaming_deps//textblob",
         "@fnw_streaming_deps//waitress",
