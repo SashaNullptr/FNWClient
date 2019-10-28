@@ -1,7 +1,7 @@
 from waitress import serve
 import logging
 
-from services.streaming import app
+from services.streaming.backend import app
 
 logger = logging.getLogger('waitress')
 logger.setLevel(logging.INFO)
