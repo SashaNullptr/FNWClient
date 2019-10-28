@@ -5,3 +5,4 @@ flask_cors
 waitress
 prometheus_client
 injector
+dateutil
