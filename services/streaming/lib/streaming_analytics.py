@@ -2,10 +2,13 @@ from datetime import datetime
 from dateutil import tz
 import re
 
-from telethon import TelegramClient, events
+from telethon import TelegramClient, events, utils
 from textblob import TextBlob
 
 from prometheus_client import Gauge, Histogram
+
+import logging
+logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',level=logging.WARNING)
 
 
 class StreamingAnalytics:
@@ -21,10 +24,7 @@ class StreamingAnalytics:
         self.__from_zone = tz.tzutc()
         self.__to_zone = tz.tzlocal()
 
-        self.__client = TelegramClient('session_name', api_id, api_hash)
-
-        self.__client.add_event_handler(self.log_sentiment, events.NewMessage())
-        self.__client.add_event_handler(self.log_time, events.NewMessage())
+        # self.__client.add_event_handler(self.log_time, events.NewMessage())
 
         self.__sentiment_gauge = Gauge(
             'sentiment', 'Sentiment score',
@@ -36,24 +36,28 @@ class StreamingAnalytics:
             ['app_name', 'endpoint']
         )
 
-        self.__client.start()
+        with TelegramClient('session_name', api_id, api_hash) as client:
+            client.add_event_handler(self.log_sentiment, events.NewMessage())
+            client.run_until_disconnected()
 
-    def __del__(self):
-        self.__client.log_out()
-        self.__client.disconnect()
+    async def log_sentiment(self, event: events.NewMessage):
 
-    def log_sentiment(self, event: events.NewMessage):
-        sentiment = self.__text_sentiment(event.raw_text)
+        def text_sentiment(text):
+
+            def clean_text(text):
+                return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", text).split())
+
+            cln_text = clean_text(text)
+            return None if not cln_text else TextBlob(cln_text).sentiment.polarity
+
+        sentiment = text_sentiment(event.raw_text)
+        print( event.raw_text )
         if sentiment:
             self.__sentiment_gauge.set(sentiment)
 
-    def log_time(self, event: events.common):
+    async def log_time(self, event: events.NewMessage):
         pass
 
-    def __text_sentiment(self,text):
-
-        def clean_text(self,text):
-            return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", text).split())
-
-        cln_text = clean_text(text)
-        return None if not cln_text else TextBlob(cln_text).sentiment.polarity
+    async def __extract_sender_name(self,event):
+        sender = await event.get_sender()
+        return utils.get_display_name(sender)
