@@ -1,7 +1,7 @@
 from waitress import serve
 import logging
 
-from services.fnwclient import app
+from services.streaming import app
 
 logger = logging.getLogger('waitress')
 logger.setLevel(logging.INFO)
