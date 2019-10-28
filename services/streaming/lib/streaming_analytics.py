@@ -2,7 +2,7 @@ from datetime import datetime
 from dateutil import tz
 import re
 
-from telethon.sync import TelegramClient, events
+from telethon import TelegramClient, events
 from textblob import TextBlob
 
 from prometheus_client import Gauge, Histogram

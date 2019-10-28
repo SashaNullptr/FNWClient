@@ -8,7 +8,7 @@ from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 
 # Local
 
-from services.fnwclient.lib import StreamingAnalytics
+from services.streaming.lib import StreamingAnalytics
 
 sa = StreamingAnalytics()
 
