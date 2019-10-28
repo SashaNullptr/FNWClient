@@ -3,8 +3,8 @@ package(default_visibility = ["//visibility:public"])
 py_library(
     name = "streaming",
     srcs = glob([
-        "*.py",
-        "**/*.py",
+        "backend/*.py",
+        "lib/*.py",
     ]),
     srcs_version = "PY3",
     deps = [
