@@ -1,6 +1,15 @@
 package(default_visibility = ["//visibility:public"])
 
 py_library(
+    name = "streaming_config",
+    srcs = glob([
+        "config/*.py",
+    ]),
+    data = glob(["config/*.ini"]),
+    srcs_version = "PY3",
+)
+
+py_library(
     name = "streaming",
     srcs = glob([
         "backend/*.py",
@@ -8,6 +17,7 @@ py_library(
     ]),
     srcs_version = "PY3",
     deps = [
+        "streaming_config",
         "@fnw_streaming_deps//flask",
         "@fnw_streaming_deps//flask_cors",
         "@fnw_streaming_deps//injector",

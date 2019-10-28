@@ -1,11 +1,14 @@
+import os
+
 from configparser import ConfigParser
 
 ROOT_DIR = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-DB_CONFIG = os.path.join(ROOT_DIR, 'api.ini')
+API_CONFIG = os.path.join(ROOT_DIR, 'api.ini')
 
-def config( filename=None, section='api' ):
 
-    filename = filename if filename is not None else DB_CONFIG
+def config(filename=None, section='api'):
+
+    filename = filename if filename is not None else API_CONFIG
 
     parser = ConfigParser()
     parser.read(filename)
