@@ -22,7 +22,7 @@ def health_check( event=None, context=None ):
 
     An example request might look like:
     .. sourcecode:: http
-       GET www.x.com/example HTTP/1.1
+       GET www.x.com/healthz HTTP/1.1
        Host: example.com
        Accept: application/json, text/javascript
 
