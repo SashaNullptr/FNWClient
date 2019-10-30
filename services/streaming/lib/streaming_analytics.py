@@ -28,12 +28,10 @@ class StreamingAnalytics:
 
         self.__sentiment_gauge = Gauge(
             'sentiment', 'Sentiment score',
-            ['app_name', 'endpoint']
         )
 
         self.__contact_times = Histogram(
             'message_end_times', 'Message send times',
-            ['app_name', 'endpoint']
         )
 
         with TelegramClient('session_name', api_id, api_hash) as client:
