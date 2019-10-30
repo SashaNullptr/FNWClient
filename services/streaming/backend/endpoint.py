@@ -10,7 +10,7 @@ from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 
 from services.streaming.lib import StreamingAnalytics
 from services.streaming.lib import send_code, authenticate_session
-from services.streaming.config import config
+from services.streaming.config import collect_env_vars
 
 blueprint = Blueprint('fnwclient', __name__)
 
@@ -40,7 +40,7 @@ def health_check( event=None, context=None ):
 @inject
 def send_code():
 
-    phone_number = config("phone")
+    api_creds = collect_env_vars("API_ID", "API_HASH")
 
     raw_data = request.json()
 
@@ -58,16 +58,17 @@ analytics_module = None
 @inject
 def login():
 
-    api_creds = config("api")
-    phone_number = config("phone")
+    api_creds = collect_env_vars("API_ID", "API_HASH")
 
     raw_data = request.json()
 
-    if 'code' not in data:
+    if not all (k in raw_data for k in ('code','phone')):
         return Response( json.dumps({'client-authenticated':False}), mimetype='application/json' )
 
     code = raw_data['code']
-    authenticate_session(**api_creds, **phone_number, code)
+    phone_number = raw_data['phone']
+
+    authenticate_session(**api_creds, phone_number, code)
 
     analytics_module = StreamingAnalytics(**api_creds)
 
