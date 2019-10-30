@@ -34,7 +34,7 @@ class StreamingAnalytics:
             'message_end_times', 'Message send times',
         )
 
-        with TelegramClient('session_name', api_id, api_hash) as client:
+        with TelegramClient('streaming_analytics', api_id, api_hash) as client:
             client.add_event_handler(self.log_sentiment, events.NewMessage())
             client.run_until_disconnected()
 
