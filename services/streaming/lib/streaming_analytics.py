@@ -49,7 +49,7 @@ class StreamingAnalytics:
             return None if not cln_text else TextBlob(cln_text).sentiment.polarity
 
         sentiment = text_sentiment(event.raw_text)
-        print( event.raw_text )
+        logging.warning("Got the following message:", event.raw_text, " with sentiment score ", sentiment)
         if sentiment:
             self.__sentiment_gauge.set(sentiment)
 
