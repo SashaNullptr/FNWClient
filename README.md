@@ -4,24 +4,29 @@
 
 ## What is this project?
 
-A Telegram client app to run analytics on my conversations with people
-I chat with; "Data Driven Dating" as it were.
+A Prometheus client that generates conversation/interpersonal interaction analytics
+from various platforms.
 
-## Installation
-Navigate to project root directory and run:
+## Building from Source
 
-```shell
-python3.6 -m pip install --user .
+This project relies on [Bazel](https://docs.bazel.build/versions/master/install.html)
+for building and container deployment.
+
+
+## Building
+
+```shell script
+bazel build //...
 ```
 
-## Run Tests
-Navigate to project root directory and run:
+## Running Locally
 
-```shell
-python3 -m unittest discover -s ./ -p '*_tests.py'
+```shell script
+bazel run //services/streaming:server
 ```
 
 ## Getting Started
 
 You'll need a Telegram API ID and Hash to get started. These can be obtained by visiting https://my.telegram.org/apps and filling out the
-form therin.
+form therein.
+
