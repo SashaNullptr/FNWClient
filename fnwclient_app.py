@@ -9,7 +9,7 @@ from flask import Flask, request, json, redirect, url_for, send_from_directory
 from flask_cors import CORS, cross_origin
 
 # Local
-from fnwclient.telegram_analytics import TelegramAnalytics
+from services.telegram_analytics import TelegramAnalytics
 
 app = Flask(__name__)
 CORS(app)

@@ -4,16 +4,21 @@ import json
 # Third Party
 from flask import Blueprint, request, Response, jsonify
 from injector import inject
+from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 
 # Local
-from fnwclient.lib import TelegramAnalytics
 
+from services.streaming.lib import StreamingAnalytics
+from services.streaming.config import config
+
+params = config()
+sa = StreamingAnalytics(**params)
 
 blueprint = Blueprint('fnwclient', __name__)
 
-@blueprint.route('/health', methods=['GET'])
+@blueprint.route('/healthz', methods=['GET'])
 @inject
-def example_endpoint( event=None, context=None ):
+def health_check( event=None, context=None ):
     """
     Healthcheck for the service
 
@@ -32,3 +37,8 @@ def example_endpoint( event=None, context=None ):
     """
 
     return Response( json.dumps({'healthy':True}), 200, mimetype='application/json' )
+
+@blueprint.route('/metrics', methods=['GET'])
+@inject
+def metrics():
+    return Response(generate_latest(), mimetype=CONTENT_TYPE_LATEST)

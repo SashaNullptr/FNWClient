@@ -13,18 +13,20 @@ load(
     "@io_bazel_rules_docker//repositories:repositories.bzl",
     container_repositories = "repositories",
 )
+
 container_repositories()
 
 load("@io_bazel_rules_docker//repositories:deps.bzl", container_deps = "deps")
+
 container_deps()
 
-load("@io_bazel_rules_docker//container:container.bzl","container_pull")
+load("@io_bazel_rules_docker//container:container.bzl", "container_pull")
 
 container_pull(
-  name = "python_3_5_image",
-  registry = "gcr.io",
-  repository = "distroless/python3",
-  digest = "sha256:9efd7c54d622c1b53a151456527749dd67dbe18ac8d69ac91639509c479abe12", # built on /9/6/2019
+    name = "dockerhub_python_3_7_image_base",
+    digest = "sha256:fc754aafacf5ad737f1e313cbd3f7cfedf08cbc713927a9e27683b7210a0aabd",  # 3.7-slim
+    registry = "index.docker.io",
+    repository = "library/python",
 )
 
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
@@ -47,4 +49,10 @@ pip_repository(
     requirements = "//thirdparty/dependencies:requirements.txt",
 )
 
-register_toolchains("//bazel/ubuntu_18_04_py_runtime:ubuntu_18_04_toolchain")
+pip_repository(
+    name = "fnw_streaming_deps",
+    python_interpreter = "python3",
+    requirements = "//services/streaming:requirements.txt",
+)
+
+register_toolchains("//thirdparty/ubuntu_18_04_py_runtime:ubuntu_18_04_toolchain")
