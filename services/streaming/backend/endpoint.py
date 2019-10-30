@@ -36,14 +36,20 @@ def health_check( event=None, context=None ):
 
     return Response( json.dumps({'healthy':True}), 200, mimetype='application/json' )
 
-@blueprint.route('/send-code', methods=['GET'])
+@blueprint.route('/send-code', methods=['POST'])
 @inject
 def send_code():
 
-    api_creds = config("api")
     phone_number = config("phone")
 
-    sent = send_code(**api_creds, **phone_number).phone_registered
+    raw_data = request.json()
+
+    if 'phone' not in data:
+        return Response( json.dumps({'code-delivered':False}), mimetype='application/json' )
+
+    phone_number = raw_data['phone']
+    sent = send_code(**api_creds, phone_number).phone_registered
+
     return Response( json.dumps({'code-delivered':sent}), mimetype='application/json' )
 
 analytics_module = None
