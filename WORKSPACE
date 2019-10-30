@@ -35,6 +35,7 @@ git_repository(
     name = "com_apt_itude_rules_pip",
     commit = "e5ed5e72bf5a7521244e1d2119821628bbf17263",
     remote = "https://github.com/apt-itude/rules_pip.git",
+    shallow_since = "1539118499 -0400",
 )
 
 load("@com_apt_itude_rules_pip//rules:dependencies.bzl", "pip_rules_dependencies")
