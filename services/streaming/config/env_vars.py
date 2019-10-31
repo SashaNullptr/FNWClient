@@ -6,5 +6,5 @@ def collect_env_vars(*argv):
     for arg in argv:
         val = environ.get(arg)
         key = arg.lower()
-        vars[val] = key
+        vars[key] = val
     return vars
