@@ -37,6 +37,10 @@ class StreamingAnalytics:
 
         self.__client =  TelegramClient('streaming_analytics', api_id, api_hash)
 
+    def __del__(self):
+
+        self.__client.disconnect()
+
         # with TelegramClient('streaming_analytics', api_id, api_hash) as client:
         #     client.add_event_handler(self.log_sentiment, events.NewMessage())
         #     client.run_until_disconnected()
@@ -60,9 +64,17 @@ class StreamingAnalytics:
         self.__client.loop.run_until_complete(auth_sess(phone,code))
 
     def run(self):
-        with self.__client as client:
-            client.add_event_handler(self.log_sentiment, events.NewMessage())
-            client.run_until_disconnected()
+
+        async def run_client():
+            await self.__client.connect()
+            await self.__client.add_event_handler(self.log_sentiment, events.NewMessage())
+
+        if self.__client.loop.run_until_complete(self.__client.is_user_authorized()):
+            self.__client.loop.run_until_complete(run_client())
+            self.__client.run_until_disconnected()
+        # with self.__client as client:
+        #     client.add_event_handler(self.log_sentiment, events.NewMessage())
+        #     client.run_until_disconnected()
 
     async def log_sentiment(self, event: events.NewMessage):
 
