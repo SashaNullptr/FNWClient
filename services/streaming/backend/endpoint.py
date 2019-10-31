@@ -9,7 +9,6 @@ from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 # Local
 
 from services.streaming.lib import StreamingAnalytics
-from services.streaming.lib import send_code_to_number, authenticate_session
 from services.streaming.config import collect_env_vars, config
 
 blueprint = Blueprint('fnwclient', __name__)
