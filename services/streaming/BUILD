@@ -51,6 +51,6 @@ container_push(
     format = "Docker",
     image = ":server",
     registry = "index.docker.io",
-    repository = "sashanullptr/fnw_client",
+    repository = "sashanullptr/fnw-streaming-client",
     tag = "latest",
 )
