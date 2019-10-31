@@ -9,11 +9,11 @@ from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 # Local
 
 from services.streaming.lib import StreamingAnalytics
-from services.streaming.config import collect_env_vars, config
+from services.streaming.config import collect_env_vars
 
 blueprint = Blueprint('fnwclient', __name__)
 
-creds = config()
+creds = collect_env_vars("API_ID", "API_HASH")
 analytics_module = StreamingAnalytics(**creds)
 
 
@@ -74,6 +74,7 @@ def login():
 
     # TODO: check if authenticate_session returns successfully
     return Response( json.dumps({'client-authenticated':True}), mimetype='application/json' )
+
 
 @blueprint.route('/metrics', methods=['GET'])
 @inject

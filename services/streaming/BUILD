@@ -5,7 +5,6 @@ py_library(
     srcs = glob([
         "config/*.py",
     ]),
-    data = glob(["config/*.ini"]),
     srcs_version = "PY3",
 )
 
