@@ -1,3 +1,4 @@
+import asyncio
 from datetime import datetime
 from dateutil import tz
 import re
@@ -34,7 +35,32 @@ class StreamingAnalytics:
             'message_end_times', 'Message send times',
         )
 
-        with TelegramClient('streaming_analytics', api_id, api_hash) as client:
+        self.__client =  TelegramClient('streaming_analytics', api_id, api_hash)
+
+        # with TelegramClient('streaming_analytics', api_id, api_hash) as client:
+        #     client.add_event_handler(self.log_sentiment, events.NewMessage())
+        #     client.run_until_disconnected()
+    def send_code_to_number(self, phone):
+
+        async def send_code(phone_num):
+            await self.__client.connect()
+            await self.__client.send_code_request(phone_num)
+            await self.__client.disconnect()
+
+        self.__client.loop.run_until_complete(send_code(phone))
+
+    def authenticate_session(self, phone, code):
+
+        async def auth_sess(phone_num, code_recv):
+
+            await self.__client.connect()
+            await self.__client.sign_in(phone_num,code_recv)
+            await self.__client.disconnect()
+
+        self.__client.loop.run_until_complete(auth_sess(phone,code))
+
+    def run(self):
+        with self.__client as client:
             client.add_event_handler(self.log_sentiment, events.NewMessage())
             client.run_until_disconnected()
 

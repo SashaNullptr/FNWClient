@@ -9,10 +9,14 @@ from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 # Local
 
 from services.streaming.lib import StreamingAnalytics
-from services.streaming.lib import send_code, authenticate_session
-from services.streaming.config import collect_env_vars
+from services.streaming.lib import send_code_to_number, authenticate_session
+from services.streaming.config import collect_env_vars, config
 
 blueprint = Blueprint('fnwclient', __name__)
+
+creds = config()
+analytics_module = StreamingAnalytics(**creds)
+
 
 @blueprint.route('/healthz', methods=['GET'])
 @inject
@@ -34,43 +38,40 @@ def health_check( event=None, context=None ):
         }
     """
 
-    return Response( json.dumps({'healthy':True}), 200, mimetype='application/json' )
+    return Response( json.dumps({'healthy': True}), 200, mimetype='application/json' )
 
 @blueprint.route('/send-code', methods=['POST'])
 @inject
 def send_code():
 
-    api_creds = collect_env_vars("API_ID", "API_HASH")
+    raw_data = request.json
 
-    raw_data = request.json()
-
-    if 'phone' not in data:
-        return Response( json.dumps({'code-delivered':False}), mimetype='application/json' )
+    if 'phone' not in raw_data:
+        return Response(json.dumps({'code-delivered': False}), mimetype='application/json')
 
     phone_number = raw_data['phone']
-    sent = send_code(**api_creds, phone_number).phone_registered
+    analytics_module.send_code_to_number(phone_number)
 
-    return Response( json.dumps({'code-delivered':sent}), mimetype='application/json' )
-
-analytics_module = None
+    return Response(json.dumps({'code-delivered': True}), mimetype='application/json')
 
 @blueprint.route('/login', methods=['POST'])
 @inject
 def login():
 
-    api_creds = collect_env_vars("API_ID", "API_HASH")
-
-    raw_data = request.json()
+    # creds = collect_env_vars("API_ID", "API_HASH")
+    raw_data = request.json
 
     if not all (k in raw_data for k in ('code','phone')):
         return Response( json.dumps({'client-authenticated':False}), mimetype='application/json' )
 
+    # code = raw_data['code']
+    # phone_number = raw_data['phone']
+
     code = raw_data['code']
-    phone_number = raw_data['phone']
+    phone = raw_data['phone']
 
-    authenticate_session(**api_creds, phone_number, code)
-
-    analytics_module = StreamingAnalytics(**api_creds)
+    analytics_module.authenticate_session(phone, code)
+    analytics_module.run()
 
     # TODO: check if authenticate_session returns successfully
     return Response( json.dumps({'client-authenticated':True}), mimetype='application/json' )
