@@ -8,6 +8,7 @@ install:
     - pip install sphinx sphinx_rtd_theme sphinxcontrib-httpdomain # Install the required dependencies
 
 script:
+    - pip install -r ./services/streaming/requirements.txt
     - python -m sphinx -b html ./docs/source ./docs/build # Build a local version of the docs
     - touch ./docs/build/.nojekyll
 
