@@ -45,6 +45,11 @@ class StreamingAnalytics:
         #     client.add_event_handler(self.log_sentiment, events.NewMessage())
         #     client.run_until_disconnected()
     def send_code_to_number(self, phone):
+        """
+        Send login code to a phone number.
+
+        :param phone: Phone number in international format, e.g "+12345678910"
+        """
 
         async def send_code(phone_num):
             await self.__client.connect()
@@ -54,6 +59,12 @@ class StreamingAnalytics:
         self.__client.loop.run_until_complete(send_code(phone))
 
     def authenticate_session(self, phone, code):
+        """
+        Authenticate current client session.
+
+        :param phone: Phone number in international format, e.g "+12345678910"
+        :param code: Six digit code received from Telegram e.g. "123456"
+        """
 
         async def auth_sess(phone_num, code_recv):
 
@@ -77,6 +88,14 @@ class StreamingAnalytics:
         #     client.run_until_disconnected()
 
     async def log_sentiment(self, event: events.NewMessage):
+        """
+
+        Log sentiment of currently received message to a Prometheus gauge.
+
+        If the current message contains no valid text, do nothing.
+
+        :param event: a new message.
+        """
 
         def text_sentiment(text):
 
@@ -92,6 +111,12 @@ class StreamingAnalytics:
             self.__sentiment_gauge.set(sentiment)
 
     async def log_time(self, event: events.NewMessage):
+        """
+
+        Log time that a current message was received to a Prometheus Historgram.
+
+        :param event: a new message.
+        """
         pass
 
     async def __extract_sender_name(self,event):
