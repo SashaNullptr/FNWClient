@@ -6,7 +6,7 @@ ROOT_DIR = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__))
 API_CONFIG = os.path.join(ROOT_DIR, 'credentials.ini')
 
 
-def config(filename=None, section):
+def config(filename=None, section="api"):
 
     filename = filename if filename is not None else API_CONFIG
 
