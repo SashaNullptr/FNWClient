@@ -5,7 +5,7 @@ python: 3.6.7 # Set the version of Python to use
 branches: master # Set the branch to build from
 
 install:
-    - pip install sphinx sphinx_rtd_theme # Install the required dependencies
+    - pip install sphinx sphinx_rtd_theme sphinxcontrib-httpdomain # Install the required dependencies
 
 script:
     - pip install .
