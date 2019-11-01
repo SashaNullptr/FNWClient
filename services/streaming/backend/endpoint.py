@@ -23,17 +23,7 @@ def health_check( event=None, context=None ):
 
     """
 
-    **Health Check**
-    ----
       Check if the service is healthy
-
-    * **URL**
-
-      /healthz/
-
-    * **Method:**
-
-      `GET`
 
     *  **URL Params**
 
@@ -45,19 +35,19 @@ def health_check( event=None, context=None ):
 
     * **Success Response:**
 
-      **Code:** 200 <br />
+      **Code:** 200
       **Content:** `{ healthy : true }`
 
     * **Error Response:**
 
-      **Code:** 404 NOT FOUND <br />
+      **Code:** 404 NOT FOUND
       **Content:** `{ healthy : false }`
 
     * **Sample Call:**
 
-      ```shell
+      .. code-block:: console
+
         curl -X GET http://0.0.0.0:8080/healthz
-      ```
 
     """
 
@@ -68,17 +58,7 @@ def health_check( event=None, context=None ):
 def send_code():
     """
 
-    **Send Code**
-    ----
       Send a Telegram client login code to a phone number.
-
-    * **URL**
-
-      /send-code/
-
-    * **Method:**
-
-      `POST`
 
     *  **URL Params**
 
@@ -94,19 +74,19 @@ def send_code():
 
     * **Success Response:**
 
-      **Code:** 200 <br />
+      **Code:** 200
         **Content:** `{ code-sent : true }`
 
     * **Error Response:**
 
-      **Code:** 404 NOT FOUND <br />
+      **Code:** 404 NOT FOUND
       **Content:** `{ code-sent : false }`
 
     * **Sample Call:**
 
-      ```shell
+      .. code-block:: console
+
         curl -X POST -H "Content-Type: application/json" http://0.0.0.0:8080/send-code -d '{"phone":"+12345678910"}'
-      ```
 
     """
 
@@ -125,17 +105,7 @@ def send_code():
 def login():
     """
 
-    **Login**
-    ----
       Login to a Telegram client session
-
-    * **URL**
-
-      /login/
-
-    * **Method:**
-
-      `POST`
 
     *  **URL Params**
 
@@ -152,19 +122,19 @@ def login():
 
     * **Success Response:**
 
-      **Code:** 200 <br />
+      **Code:** 200
         **Content:** `{ client-authenticated : true }`
 
     * **Error Response:**
 
-      **Code:** 404 NOT FOUND <br />
+      **Code:** 404 NOT FOUND
       **Content:** `{ client-authenticated : false }`
 
     * **Sample Call:**
 
-      ```shell
+      .. code-block:: console
+
         curl -X POST -H "Content-Type: application/json" http://0.0.0.0:8080/send-code -d '{"phone":"+12345678910", "code":"123456"}'
-      ```
 
     """
 
@@ -188,17 +158,7 @@ def login():
 def metrics():
     """
 
-    **Metrics**
-    ----
       Collect latest Prometheus client metrics.
-
-    * **URL**
-
-      /metrics/
-
-    * **Method:**
-
-      `GET`
 
     *  **URL Params**
 
@@ -210,9 +170,9 @@ def metrics():
 
     * **Sample Call:**
 
-      ```shell
+      .. code-block:: console
+      
         curl -X GET http://0.0.0.0:8080/metrics
-      ```
 
     """
     return Response(generate_latest(), mimetype=CONTENT_TYPE_LATEST)
