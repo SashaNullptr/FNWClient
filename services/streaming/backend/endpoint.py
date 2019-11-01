@@ -7,7 +7,6 @@ from injector import inject
 from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 
 # Local
-
 from services.streaming.lib import StreamingAnalytics
 from services.streaming.config import collect_env_vars
 
@@ -169,15 +168,10 @@ def login():
 
     """
 
-
-    # creds = collect_env_vars("API_ID", "API_HASH")
     raw_data = request.json
 
     if not all (k in raw_data for k in ('code','phone')):
         return Response( json.dumps({'client-authenticated':False}), mimetype='application/json' )
-
-    # code = raw_data['code']
-    # phone_number = raw_data['phone']
 
     code = raw_data['code']
     phone = raw_data['phone']
