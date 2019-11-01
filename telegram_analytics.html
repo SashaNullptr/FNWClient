@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>The Telegram Analytics Module &mdash; FNWClient 0.1.0 documentation</title>
+  <title>The Telegram Streaming Analytics Module &mdash; FNWClient 0.1.0 documentation</title>
   
 
   
@@ -91,8 +91,9 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="package_contents.html">Telegram Analytics</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">The Telegram Analytics Module</a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The Telegram Streaming Analytics Module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#design-notes">Design Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-docs">API Docs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#implementation-documentation">Implementation Documentation</a></li>
 </ul>
 </li>
@@ -148,7 +149,7 @@
         
           <li><a href="package_contents.html">Telegram Analytics</a> &raquo;</li>
         
-      <li>The Telegram Analytics Module</li>
+      <li>The Telegram Streaming Analytics Module</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -165,15 +166,193 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="the-telegram-analytics-module">
-<h1>The Telegram Analytics Module<a class="headerlink" href="#the-telegram-analytics-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="the-telegram-streaming-analytics-module">
+<h1>The Telegram Streaming Analytics Module<a class="headerlink" href="#the-telegram-streaming-analytics-module" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="design-notes">
 <h2>Design Notes<a class="headerlink" href="#design-notes" title="Permalink to this headline">¶</a></h2>
 <p>The Telgram Interface makes use of the Telegram Client API to grab message data
 and run analytics.</p>
 </div>
+<div class="section" id="api-docs">
+<h2>API Docs<a class="headerlink" href="#api-docs" title="Permalink to this headline">¶</a></h2>
+<dl class="post">
+<dt id="post--send-code">
+<code class="sig-name descname">POST </code><code class="sig-name descname">/send-code</code><a class="headerlink" href="#post--send-code" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Send a Telegram client login code to a phone number.</p>
+</div></blockquote>
+<ul>
+<li><p><strong>URL Params</strong></p>
+<p>None</p>
+</li>
+<li><p><strong>Data Params</strong></p>
+<blockquote>
+<div><p><strong>Required:</strong></p>
+<p><cite>phone=[str]</cite></p>
+</div></blockquote>
+</li>
+<li><p><strong>Success Response:</strong></p>
+<dl class="simple">
+<dt><strong>Code:</strong> 200</dt><dd><p><strong>Content:</strong> <cite>{ code-sent : true }</cite></p>
+</dd>
+</dl>
+</li>
+<li><p><strong>Error Response:</strong></p>
+<p><strong>Code:</strong> 404 NOT FOUND
+<strong>Content:</strong> <cite>{ code-sent : false }</cite></p>
+</li>
+<li><p><strong>Sample Call:</strong></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">curl -X POST -H &quot;Content-Type: application/json&quot; http://0.0.0.0:8080/send-code -d &#39;{&quot;phone&quot;:&quot;+12345678910&quot;}&#39;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--healthz">
+<code class="sig-name descname">GET </code><code class="sig-name descname">/healthz</code><a class="headerlink" href="#get--healthz" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Check if the service is healthy</p>
+</div></blockquote>
+<ul>
+<li><p><strong>URL Params</strong></p>
+<p>None</p>
+</li>
+<li><p><strong>Data Params</strong></p>
+<p>None</p>
+</li>
+<li><p><strong>Success Response:</strong></p>
+<p><strong>Code:</strong> 200
+<strong>Content:</strong> <cite>{ healthy : true }</cite></p>
+</li>
+<li><p><strong>Error Response:</strong></p>
+<p><strong>Code:</strong> 404 NOT FOUND
+<strong>Content:</strong> <cite>{ healthy : false }</cite></p>
+</li>
+<li><p><strong>Sample Call:</strong></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">curl -X GET http://0.0.0.0:8080/healthz</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="get">
+<dt id="get--metrics">
+<code class="sig-name descname">GET </code><code class="sig-name descname">/metrics</code><a class="headerlink" href="#get--metrics" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Collect latest Prometheus client metrics.</p>
+</div></blockquote>
+<ul>
+<li><p><strong>URL Params</strong></p>
+<p>None</p>
+</li>
+<li><p><strong>Data Params</strong></p>
+<p>None</p>
+</li>
+<li><p><strong>Sample Call:</strong></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">curl -X GET http://0.0.0.0:8080/metrics</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="post">
+<dt id="post--login">
+<code class="sig-name descname">POST </code><code class="sig-name descname">/login</code><a class="headerlink" href="#post--login" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Login to a Telegram client session</p>
+</div></blockquote>
+<ul>
+<li><p><strong>URL Params</strong></p>
+<p>None</p>
+</li>
+<li><p><strong>Data Params</strong></p>
+<blockquote>
+<div><p><strong>Required:</strong></p>
+<ul class="simple">
+<li><p><cite>phone=str</cite></p></li>
+<li><p><cite>code=str</cite></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>Success Response:</strong></p>
+<dl class="simple">
+<dt><strong>Code:</strong> 200</dt><dd><p><strong>Content:</strong> <cite>{ client-authenticated : true }</cite></p>
+</dd>
+</dl>
+</li>
+<li><p><strong>Error Response:</strong></p>
+<p><strong>Code:</strong> 404 NOT FOUND
+<strong>Content:</strong> <cite>{ client-authenticated : false }</cite></p>
+</li>
+<li><p><strong>Sample Call:</strong></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">curl -X POST -H &quot;Content-Type: application/json&quot; http://0.0.0.0:8080/send-code -d &#39;{&quot;phone&quot;:&quot;+12345678910&quot;, &quot;code&quot;:&quot;123456&quot;}&#39;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</dd></dl>
+
+</div>
 <div class="section" id="implementation-documentation">
 <h2>Implementation Documentation<a class="headerlink" href="#implementation-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="services.streaming.lib.StreamingAnalytics">
+<em class="property">class </em><code class="sig-prename descclassname">services.streaming.lib.</code><code class="sig-name descname">StreamingAnalytics</code><span class="sig-paren">(</span><em class="sig-param">api_id</em>, <em class="sig-param">api_hash</em><span class="sig-paren">)</span><a class="headerlink" href="#services.streaming.lib.StreamingAnalytics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log information about events as they happen</p>
+<dl class="method">
+<dt id="services.streaming.lib.StreamingAnalytics.authenticate_session">
+<code class="sig-name descname">authenticate_session</code><span class="sig-paren">(</span><em class="sig-param">phone</em>, <em class="sig-param">code</em><span class="sig-paren">)</span><a class="headerlink" href="#services.streaming.lib.StreamingAnalytics.authenticate_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Authenticate current client session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phone</strong> – Phone number in international format, e.g “+12345678910”</p></li>
+<li><p><strong>code</strong> – Six digit code received from Telegram e.g. “123456”</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="services.streaming.lib.StreamingAnalytics.log_sentiment">
+<em class="property">async </em><code class="sig-name descname">log_sentiment</code><span class="sig-paren">(</span><em class="sig-param">event: telethon.events.newmessage.NewMessage</em><span class="sig-paren">)</span><a class="headerlink" href="#services.streaming.lib.StreamingAnalytics.log_sentiment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log sentiment of currently received message to a Prometheus gauge.</p>
+<p>If the current message contains no valid text, do nothing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>event</strong> – a new message.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="services.streaming.lib.StreamingAnalytics.log_time">
+<em class="property">async </em><code class="sig-name descname">log_time</code><span class="sig-paren">(</span><em class="sig-param">event: telethon.events.newmessage.NewMessage</em><span class="sig-paren">)</span><a class="headerlink" href="#services.streaming.lib.StreamingAnalytics.log_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log time that a current message was received to a Prometheus Historgram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>event</strong> – a new message.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="services.streaming.lib.StreamingAnalytics.send_code_to_number">
+<code class="sig-name descname">send_code_to_number</code><span class="sig-paren">(</span><em class="sig-param">phone</em><span class="sig-paren">)</span><a class="headerlink" href="#services.streaming.lib.StreamingAnalytics.send_code_to_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send login code to a phone number.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>phone</strong> – Phone number in international format, e.g “+12345678910”</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 
