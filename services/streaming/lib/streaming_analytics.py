@@ -39,10 +39,6 @@ class StreamingAnalytics:
 
         self.__client =  TelegramClient('streaming_analytics', api_id, api_hash)
 
-    def __del__(self):
-
-        self.__client.disconnect()
-
         # with TelegramClient('streaming_analytics', api_id, api_hash) as client:
         #     client.add_event_handler(self.log_sentiment, events.NewMessage())
         #     client.run_until_disconnected()
@@ -78,16 +74,19 @@ class StreamingAnalytics:
 
     def run(self):
 
-        async def run_client():
-            await self.__client.connect()
-            await self.__client.add_event_handler(self.log_sentiment, events.NewMessage())
+        async def init_client():
+            await self.__client.start()
+            self.__client.add_event_handler(self.log_sentiment, events.NewMessage())
+            self.__client.add_event_handler(self.log_time, events.NewMessage())
 
         if self.__client.loop.run_until_complete(self.__client.is_user_authorized()):
-            self.__client.loop.run_until_complete(run_client())
+            # with self.__client as client:
+            #     client.add_event_handler(self.log_sentiment, events.NewMessage())
+            #     client.add_event_handler(self.log_time, events.NewMessage())
+            #     client.run_until_disconnected()
+
+            self.__client.loop.run_until_complete(init_client())
             self.__client.run_until_disconnected()
-        # with self.__client as client:
-        #     client.add_event_handler(self.log_sentiment, events.NewMessage())
-        #     client.run_until_disconnected()
 
     async def log_sentiment(self, event: events.NewMessage):
         """
@@ -108,7 +107,9 @@ class StreamingAnalytics:
             return None if not cln_text else TextBlob(cln_text).sentiment.polarity
 
         sentiment = text_sentiment(event.raw_text)
+
         logging.warning("Got the following message:", event.raw_text, " with sentiment score ", sentiment)
+
         if sentiment:
 
             user = self.__client.loop.run_until_complete(self.__extract_sender_name(event))
@@ -123,6 +124,9 @@ class StreamingAnalytics:
         """
         user = self.__client.loop.run_until_complete(self.__extract_sender_name(event))
         time = self.__client.loop.run_until_complete(self.__extract_time_sent(event))
+
+        logging.warning("Got the following message:", event.raw_text, " at time ", time)
+
         self.__contact_times.labels(user).observe(time)
 
     @staticmethod

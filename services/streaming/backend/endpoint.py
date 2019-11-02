@@ -147,7 +147,7 @@ def login():
     phone = raw_data['phone']
 
     analytics_module.authenticate_session(phone, code)
-    analytics_module.run()
+    # analytics_module.run()
 
     # TODO: check if authenticate_session returns successfully
     return Response( json.dumps({'client-authenticated':True}), mimetype='application/json' )
