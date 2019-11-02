@@ -122,12 +122,15 @@ class StreamingAnalytics:
         :param event: a new message.
         """
         user = self.__client.loop.run_until_complete(self.__extract_sender_name(event))
-        # self.__contact_times.labels(user).observe(time)
+        time = self.__client.loop.run_until_complete(self.__extract_time_sent(event))
+        self.__contact_times.labels(user).observe(time)
 
-    async def __extract_sender_name(self,event):
+    @staticmethod
+    async def __extract_sender_name(self,event: events.common.EventCommon):
         sender = await event.get_sender()
         return utils.get_display_name(sender)
 
-    async def __extract_time_sent(self,event):
-        sender = await event.get_sender()
-        return utils.get_display_name(sender)
+    @staticmethod
+    async def __extract_time_sent(self,event: events.common.EventCommon):
+        message = await event.message()
+        return message.astimezone(self.__to_zone).time()
