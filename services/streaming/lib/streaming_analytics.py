@@ -29,10 +29,12 @@ class StreamingAnalytics:
 
         self.__sentiment_gauge = Gauge(
             'sentiment', 'Sentiment score',
+            ["user"]
         )
 
         self.__contact_times = Histogram(
             'message_end_times', 'Message send times',
+            ["user"]
         )
 
         self.__client =  TelegramClient('streaming_analytics', api_id, api_hash)
@@ -108,7 +110,9 @@ class StreamingAnalytics:
         sentiment = text_sentiment(event.raw_text)
         logging.warning("Got the following message:", event.raw_text, " with sentiment score ", sentiment)
         if sentiment:
-            self.__sentiment_gauge.set(sentiment)
+
+            user = self.__client.loop.run_until_complete(self.__extract_sender_name(event))
+            self.__sentiment_gauge.labels(user).set(sentiment)
 
     async def log_time(self, event: events.NewMessage):
         """
@@ -117,8 +121,13 @@ class StreamingAnalytics:
 
         :param event: a new message.
         """
-        pass
+        user = self.__client.loop.run_until_complete(self.__extract_sender_name(event))
+        # self.__contact_times.labels(user).observe(time)
 
     async def __extract_sender_name(self,event):
+        sender = await event.get_sender()
+        return utils.get_display_name(sender)
+
+    async def __extract_time_sent(self,event):
         sender = await event.get_sender()
         return utils.get_display_name(sender)
