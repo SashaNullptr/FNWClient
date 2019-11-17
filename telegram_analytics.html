@@ -175,40 +175,6 @@ and run analytics.</p>
 </div>
 <div class="section" id="api-docs">
 <h2>API Docs<a class="headerlink" href="#api-docs" title="Permalink to this headline">¶</a></h2>
-<dl class="post">
-<dt id="post--send-code">
-<code class="sig-name descname">POST </code><code class="sig-name descname">/send-code</code><a class="headerlink" href="#post--send-code" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><p>Send a Telegram client login code to a phone number.</p>
-</div></blockquote>
-<ul>
-<li><p><strong>URL Params</strong></p>
-<p>None</p>
-</li>
-<li><p><strong>Data Params</strong></p>
-<blockquote>
-<div><p><strong>Required:</strong></p>
-<p><cite>phone=[str]</cite></p>
-</div></blockquote>
-</li>
-<li><p><strong>Success Response:</strong></p>
-<dl class="simple">
-<dt><strong>Code:</strong> 200</dt><dd><p><strong>Content:</strong> <cite>{ code-sent : true }</cite></p>
-</dd>
-</dl>
-</li>
-<li><p><strong>Error Response:</strong></p>
-<p><strong>Code:</strong> 404 NOT FOUND
-<strong>Content:</strong> <cite>{ code-sent : false }</cite></p>
-</li>
-<li><p><strong>Sample Call:</strong></p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">curl -X POST -H &quot;Content-Type: application/json&quot; http://0.0.0.0:8080/send-code -d &#39;{&quot;phone&quot;:&quot;+12345678910&quot;}&#39;</span>
-</pre></div>
-</div>
-</li>
-</ul>
-</dd></dl>
-
 <dl class="get">
 <dt id="get--healthz">
 <code class="sig-name descname">GET </code><code class="sig-name descname">/healthz</code><a class="headerlink" href="#get--healthz" title="Permalink to this definition">¶</a></dt>
@@ -259,67 +225,16 @@ and run analytics.</p>
 </ul>
 </dd></dl>
 
-<dl class="post">
-<dt id="post--login">
-<code class="sig-name descname">POST </code><code class="sig-name descname">/login</code><a class="headerlink" href="#post--login" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><p>Login to a Telegram client session</p>
-</div></blockquote>
-<ul>
-<li><p><strong>URL Params</strong></p>
-<p>None</p>
-</li>
-<li><p><strong>Data Params</strong></p>
-<blockquote>
-<div><p><strong>Required:</strong></p>
-<ul class="simple">
-<li><p><cite>phone=str</cite></p></li>
-<li><p><cite>code=str</cite></p></li>
-</ul>
-</div></blockquote>
-</li>
-<li><p><strong>Success Response:</strong></p>
-<dl class="simple">
-<dt><strong>Code:</strong> 200</dt><dd><p><strong>Content:</strong> <cite>{ client-authenticated : true }</cite></p>
-</dd>
-</dl>
-</li>
-<li><p><strong>Error Response:</strong></p>
-<p><strong>Code:</strong> 404 NOT FOUND
-<strong>Content:</strong> <cite>{ client-authenticated : false }</cite></p>
-</li>
-<li><p><strong>Sample Call:</strong></p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">curl -X POST -H &quot;Content-Type: application/json&quot; http://0.0.0.0:8080/send-code -d &#39;{&quot;phone&quot;:&quot;+12345678910&quot;, &quot;code&quot;:&quot;123456&quot;}&#39;</span>
-</pre></div>
-</div>
-</li>
-</ul>
-</dd></dl>
-
 </div>
 <div class="section" id="implementation-documentation">
 <h2>Implementation Documentation<a class="headerlink" href="#implementation-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="services.streaming.lib.StreamingAnalytics">
-<em class="property">class </em><code class="sig-prename descclassname">services.streaming.lib.</code><code class="sig-name descname">StreamingAnalytics</code><span class="sig-paren">(</span><em class="sig-param">api_id</em>, <em class="sig-param">api_hash</em><span class="sig-paren">)</span><a class="headerlink" href="#services.streaming.lib.StreamingAnalytics" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">services.streaming.lib.</code><code class="sig-name descname">StreamingAnalytics</code><span class="sig-paren">(</span><em class="sig-param">api_id</em>, <em class="sig-param">api_hash</em>, <em class="sig-param">session</em><span class="sig-paren">)</span><a class="headerlink" href="#services.streaming.lib.StreamingAnalytics" title="Permalink to this definition">¶</a></dt>
 <dd><p>Log information about events as they happen</p>
 <dl class="method">
-<dt id="services.streaming.lib.StreamingAnalytics.authenticate_session">
-<code class="sig-name descname">authenticate_session</code><span class="sig-paren">(</span><em class="sig-param">phone</em>, <em class="sig-param">code</em><span class="sig-paren">)</span><a class="headerlink" href="#services.streaming.lib.StreamingAnalytics.authenticate_session" title="Permalink to this definition">¶</a></dt>
-<dd><p>Authenticate current client session.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>phone</strong> – Phone number in international format, e.g “+12345678910”</p></li>
-<li><p><strong>code</strong> – Six digit code received from Telegram e.g. “123456”</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
 <dt id="services.streaming.lib.StreamingAnalytics.log_sentiment">
-<em class="property">async </em><code class="sig-name descname">log_sentiment</code><span class="sig-paren">(</span><em class="sig-param">event: telethon.events.newmessage.NewMessage</em><span class="sig-paren">)</span><a class="headerlink" href="#services.streaming.lib.StreamingAnalytics.log_sentiment" title="Permalink to this definition">¶</a></dt>
+<em class="property">async </em><code class="sig-name descname">log_sentiment</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="headerlink" href="#services.streaming.lib.StreamingAnalytics.log_sentiment" title="Permalink to this definition">¶</a></dt>
 <dd><p>Log sentiment of currently received message to a Prometheus gauge.</p>
 <p>If the current message contains no valid text, do nothing.</p>
 <dl class="field-list simple">
@@ -331,22 +246,11 @@ and run analytics.</p>
 
 <dl class="method">
 <dt id="services.streaming.lib.StreamingAnalytics.log_time">
-<em class="property">async </em><code class="sig-name descname">log_time</code><span class="sig-paren">(</span><em class="sig-param">event: telethon.events.newmessage.NewMessage</em><span class="sig-paren">)</span><a class="headerlink" href="#services.streaming.lib.StreamingAnalytics.log_time" title="Permalink to this definition">¶</a></dt>
+<em class="property">async </em><code class="sig-name descname">log_time</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="headerlink" href="#services.streaming.lib.StreamingAnalytics.log_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Log time that a current message was received to a Prometheus Historgram.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>event</strong> – a new message.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="services.streaming.lib.StreamingAnalytics.send_code_to_number">
-<code class="sig-name descname">send_code_to_number</code><span class="sig-paren">(</span><em class="sig-param">phone</em><span class="sig-paren">)</span><a class="headerlink" href="#services.streaming.lib.StreamingAnalytics.send_code_to_number" title="Permalink to this definition">¶</a></dt>
-<dd><p>Send login code to a phone number.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>phone</strong> – Phone number in international format, e.g “+12345678910”</p>
 </dd>
 </dl>
 </dd></dl>
