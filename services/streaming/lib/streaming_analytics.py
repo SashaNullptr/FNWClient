@@ -25,8 +25,6 @@ class StreamingAnalytics:
         self.__from_zone = tz.tzutc()
         self.__to_zone = tz.tzlocal()
 
-        # self.__client.add_event_handler(self.log_time, events.NewMessage())
-
         self.__sentiment_gauge = Gauge(
             'sentiment', 'Sentiment score',
             ["user"]
@@ -39,9 +37,20 @@ class StreamingAnalytics:
 
         self.__client =  TelegramClient('streaming_analytics', api_id, api_hash)
 
+        try:
+            self.__client.start()
+
+            self.__client.add_event_handler(self.log_sentiment, events.NewMessage())
+            self.__client.add_event_handler(self.log_time, events.NewMessage())
+            self.__client.run_until_disconnected()
+        finally:
+            self.__client.disconnect()
+
         # with TelegramClient('streaming_analytics', api_id, api_hash) as client:
-        #     client.add_event_handler(self.log_sentiment, events.NewMessage())
-        #     client.run_until_disconnected()
+        #             client.add_event_handler(self.log_sentiment, events.NewMessage())
+        #             client.add_event_handler(self.log_time, events.NewMessage())
+        #             client.run_until_disconnected()
+
     def send_code_to_number(self, phone):
         """
         Send login code to a phone number.
@@ -86,7 +95,7 @@ class StreamingAnalytics:
             #     client.run_until_disconnected()
 
             self.__client.loop.run_until_complete(init_client())
-            self.__client.run_until_disconnected()
+            # self.__client.run_until_disconnected()
 
     async def log_sentiment(self, event: events.NewMessage):
         """
