@@ -4,12 +4,14 @@ from dateutil import tz
 import re
 
 from telethon import TelegramClient, events, utils
+from telethon.sessions import StringSession
+
 from textblob import TextBlob
 
 from prometheus_client import Gauge, Histogram
 
 import logging
-logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',level=logging.WARNING)
+logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',level=logging.DEBUG)
 
 
 class StreamingAnalytics:
@@ -65,7 +67,7 @@ class StreamingAnalytics:
 
         sentiment = text_sentiment(event.raw_text)
 
-        logging.warning("Got the following message: \"" + event.raw_text + "\" with sentiment score " + str(sentiment))
+        logging.debug("Got the following message: \"" + event.raw_text + "\" with sentiment score " + str(sentiment))
 
         if sentiment:
 
@@ -87,7 +89,7 @@ class StreamingAnalytics:
 
         time = message.date.astimezone(self.__to_zone).time().hour
 
-        logging.warning("Got the following message: \"" + event.raw_text + "\" at time " + str(time))
+        logging.debug("Got the following message: \"" + event.raw_text + "\" at time " + str(time))
 
         self.__contact_times.labels(user).observe(time)
 
