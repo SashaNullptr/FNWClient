@@ -112,29 +112,34 @@ class StreamingAnalytics:
 
         if sentiment:
 
-            user = self.__client.loop.run_until_complete(self.__extract_sender_name(event))
+            sender = await event.get_sender()
+            user =  utils.get_display_name(sender)
             self.__sentiment_gauge.labels(user).set(sentiment)
 
-    async def log_time(self, event: events.NewMessage):
+    async def log_time(self, event):
         """
 
         Log time that a current message was received to a Prometheus Historgram.
 
         :param event: a new message.
         """
-        user = self.__client.loop.run_until_complete(self.__extract_sender_name(event))
-        time = self.__client.loop.run_until_complete(self.__extract_time_sent(event))
+        sender = await event.get_sender()
+        user =  utils.get_display_name(sender)
+
+        message = event.message
+
+        time = message.date.astimezone(self.__to_zone).time().hour
 
         logging.warning("Got the following message: \"" + event.raw_text + "\" at time " + str(time))
 
         self.__contact_times.labels(user).observe(time)
 
     @staticmethod
-    async def __extract_sender_name(self,event: events.common.EventCommon):
+    async def __extract_sender_name(self, event):
         sender = await event.get_sender()
         return utils.get_display_name(sender)
 
     @staticmethod
-    async def __extract_time_sent(self,event: events.common.EventCommon):
+    async def __extract_time_sent(self, event):
         message = await event.message()
         return message.astimezone(self.__to_zone).time()
