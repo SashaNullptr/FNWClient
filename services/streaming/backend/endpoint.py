@@ -6,15 +6,7 @@ from flask import Blueprint, request, Response, jsonify
 from injector import inject
 from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 
-# Local
-from services.streaming.lib import StreamingAnalytics
-from services.streaming.config import collect_env_vars
-
 blueprint = Blueprint('fnwclient', __name__)
-
-creds = collect_env_vars("API_ID", "API_HASH")
-analytics_module = StreamingAnalytics(**creds)
-
 
 @blueprint.route('/healthz', methods=['GET'])
 @inject
