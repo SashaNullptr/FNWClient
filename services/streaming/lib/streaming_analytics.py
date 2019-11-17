@@ -108,7 +108,7 @@ class StreamingAnalytics:
 
         sentiment = text_sentiment(event.raw_text)
 
-        logging.warning("Got the following message:", event.raw_text, " with sentiment score ", sentiment)
+        logging.warning("Got the following message: \"" + event.raw_text + "\" with sentiment score " + str(sentiment))
 
         if sentiment:
 
@@ -125,7 +125,7 @@ class StreamingAnalytics:
         user = self.__client.loop.run_until_complete(self.__extract_sender_name(event))
         time = self.__client.loop.run_until_complete(self.__extract_time_sent(event))
 
-        logging.warning("Got the following message:", event.raw_text, " at time ", time)
+        logging.warning("Got the following message: \"" + event.raw_text + "\" at time " + str(time))
 
         self.__contact_times.labels(user).observe(time)
 
