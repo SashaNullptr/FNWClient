@@ -17,10 +17,11 @@ class StreamingAnalytics:
     Log information about events as they happen
     """
 
-    def __init__(self, api_id, api_hash):
+    def __init__(self, api_id, api_hash, session):
 
         self.__api_id = api_id
         self.__api_hash = api_hash
+        self.__session = session
 
         self.__from_zone = tz.tzutc()
         self.__to_zone = tz.tzlocal()
@@ -35,69 +36,16 @@ class StreamingAnalytics:
             ["user"]
         )
 
-        self.__client =  TelegramClient('streaming_analytics', api_id, api_hash)
+    def init_client(self):
 
-        try:
-            self.__client.start()
+        with TelegramClient(StringSession(self.__session), self.__api_id, self.__api_hash) as client:
 
-            self.__client.add_event_handler(self.log_sentiment, events.NewMessage())
-            self.__client.add_event_handler(self.log_time, events.NewMessage())
-            self.__client.run_until_disconnected()
-        finally:
-            self.__client.disconnect()
+            client.add_event_handler(self.log_sentiment, events.NewMessage())
+            client.add_event_handler(self.log_time, events.NewMessage())
+            # client.loop.run_until_complete(client(GetStateRequest()))
+            client.run_until_disconnected()
 
-        # with TelegramClient('streaming_analytics', api_id, api_hash) as client:
-        #             client.add_event_handler(self.log_sentiment, events.NewMessage())
-        #             client.add_event_handler(self.log_time, events.NewMessage())
-        #             client.run_until_disconnected()
-
-    def send_code_to_number(self, phone):
-        """
-        Send login code to a phone number.
-
-        :param phone: Phone number in international format, e.g "+12345678910"
-        """
-
-        async def send_code(phone_num):
-            await self.__client.connect()
-            await self.__client.send_code_request(phone_num)
-            await self.__client.disconnect()
-
-        self.__client.loop.run_until_complete(send_code(phone))
-
-    def authenticate_session(self, phone, code):
-        """
-        Authenticate current client session.
-
-        :param phone: Phone number in international format, e.g "+12345678910"
-        :param code: Six digit code received from Telegram e.g. "123456"
-        """
-
-        async def auth_sess(phone_num, code_recv):
-
-            await self.__client.connect()
-            await self.__client.sign_in(phone_num,code_recv)
-            await self.__client.disconnect()
-
-        self.__client.loop.run_until_complete(auth_sess(phone,code))
-
-    def run(self):
-
-        async def init_client():
-            await self.__client.start()
-            self.__client.add_event_handler(self.log_sentiment, events.NewMessage())
-            self.__client.add_event_handler(self.log_time, events.NewMessage())
-
-        if self.__client.loop.run_until_complete(self.__client.is_user_authorized()):
-            # with self.__client as client:
-            #     client.add_event_handler(self.log_sentiment, events.NewMessage())
-            #     client.add_event_handler(self.log_time, events.NewMessage())
-            #     client.run_until_disconnected()
-
-            self.__client.loop.run_until_complete(init_client())
-            # self.__client.run_until_disconnected()
-
-    async def log_sentiment(self, event: events.NewMessage):
+    async def log_sentiment(self, event):
         """
 
         Log sentiment of currently received message to a Prometheus gauge.
