@@ -1,8 +1,21 @@
 from flair.embeddings import FlairEmbeddings, BertEmbeddings, WordEmbeddings, DocumentRNNEmbeddings, ELMoEmbeddings
 from flair.models import TextClassifier
 from flair.trainers import ModelTrainer
+from flair.training_utils import EvaluationMetric
+from flair.visual.training_curves import Plotter
+from flair.datasets import ClassificationCorpus
 
-def train_sentiment_model():
+
+def train_sentiment_model(root_dir,train, dev, test):
+
+    corpus = ClassificationCorpus(
+        root_dir,
+        train_file=train,
+        dev_file=dev,
+        test_file=test,
+    )
+
+    label_dict = corpus.make_label_dictionary()
 
     # init Flair embeddings
     flair_forward_embedding = FlairEmbeddings('multi-forward')
@@ -27,14 +40,21 @@ def train_sentiment_model():
         reproject_words_dimension=256,
     )
 
-    # Sketch of training step.
-    #
-    # classifier = TextClassifier(document_embeddings,
-    #                             label_dictionary=corpus.make_label_dictionary(),
-    #                             multi_label=False)
-    #
-    # trainer = ModelTrainer(classifier, corpus)
-    # trainer.train('./', max_epochs=25)
+    classifier = TextClassifier(document_embeddings,
+                                label_dictionary=label_dict,
+                                multi_label=False)
+
+    trainer = ModelTrainer(classifier, corpus)
+    trainer.train('./',
+                  EvaluationMetric.MACRO_F1_SCORE,
+                  max_epochs=25)
+
+    plotter = Plotter()
+    plotter.plot_training_curves(file_path / 'loss.tsv')
+    plotter.plot_weights(file_path / 'weights.txt')
 
 if __name__ == "__main__":
-    train_sentiment_model()
+    train_sentiment_model("./data_sets/SST_5",
+                          "train.txt",
+                          "dev.txt",
+                          "train.txt")
