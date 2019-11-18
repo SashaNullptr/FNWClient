@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run Server" type="BlazeCommandRunConfigurationType" factoryName="Bazel Command">
+    <blaze-settings handler-id="BlazeCommandGenericRunConfigurationHandlerProvider" blaze-command="run">
+      <env_state>
+        <envs />
+      </env_state>
+      <blaze-target>//services/streaming:server</blaze-target>
+    </blaze-settings>
+    <method v="2">
+      <option name="Blaze.BeforeRunTask" enabled="true" />
+    </method>
+  </configuration>
+</component>
