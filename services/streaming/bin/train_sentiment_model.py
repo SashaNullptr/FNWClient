@@ -1,5 +1,6 @@
-from flair.embeddings import FlairEmbeddings, BertEmbeddings, WordEmbeddings, DocumentRNNEmbeddings
-
+from flair.embeddings import FlairEmbeddings, BertEmbeddings, WordEmbeddings, DocumentRNNEmbeddings, ELMoEmbeddings
+from flair.models import TextClassifier
+from flair.trainers import ModelTrainer
 
 def train_sentiment_model():
 
@@ -25,6 +26,15 @@ def train_sentiment_model():
         reproject_words=True,
         reproject_words_dimension=256,
     )
+
+    # Sketch of training step.
+    #
+    # classifier = TextClassifier(document_embeddings,
+    #                             label_dictionary=corpus.make_label_dictionary(),
+    #                             multi_label=False)
+    #
+    # trainer = ModelTrainer(classifier, corpus)
+    # trainer.train('./', max_epochs=25)
 
 if __name__ == "__main__":
     train_sentiment_model()
