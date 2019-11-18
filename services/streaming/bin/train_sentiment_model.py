@@ -5,15 +5,12 @@ from flair.training_utils import EvaluationMetric
 from flair.visual.training_curves import Plotter
 from flair.datasets import ClassificationCorpus
 
+from pathlib import Path
 
-def train_sentiment_model(root_dir,train, dev, test):
 
-    corpus = ClassificationCorpus(
-        root_dir,
-        train_file=train,
-        dev_file=dev,
-        test_file=test,
-    )
+def train_sentiment_model(root_dir):
+
+    corpus = ClassificationCorpus(root_dir)
 
     label_dict = corpus.make_label_dictionary()
 
@@ -45,16 +42,15 @@ def train_sentiment_model(root_dir,train, dev, test):
                                 multi_label=False)
 
     trainer = ModelTrainer(classifier, corpus)
-    trainer.train('./',
-                  EvaluationMetric.MACRO_F1_SCORE,
-                  max_epochs=25)
+    here = Path('.').resolve()
+    trainer.train(here, max_epochs=25)
 
     plotter = Plotter()
-    plotter.plot_training_curves(file_path / 'loss.tsv')
-    plotter.plot_weights(file_path / 'weights.txt')
+    plotter.plot_training_curves(root_dir / 'loss.tsv')
+    plotter.plot_weights(root_dir / 'weights.txt')
 
 if __name__ == "__main__":
-    train_sentiment_model("./data_sets/SST_5",
-                          "train.txt",
-                          "dev.txt",
-                          "train.txt")
+    root_path =  Path('./data_sets/SST_5').resolve()
+
+    print(root_path)
+    train_sentiment_model(root_path)
