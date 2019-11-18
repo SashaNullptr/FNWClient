@@ -7,6 +7,8 @@
 A Prometheus client that generates conversation/interpersonal interaction analytics
 from various platforms.
 
+![Dashboard Demo](tg_dashboard_demo.png)
+
 ## Building from Source
 
 This project relies on [Bazel](https://docs.bazel.build/versions/master/install.html)
