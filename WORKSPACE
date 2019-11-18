@@ -36,6 +36,13 @@ container_pull(
     repository = "library/python",
 )
 
+load("@io_bazel_rules_docker//contrib:dockerfile_build.bzl", "dockerfile_image")
+
+dockerfile_image(
+    name = "model_training_base",
+    dockerfile = "//thirdparty/containers/Dockerfiles/ModelTraining:Dockerfile",
+)
+
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 git_repository(
