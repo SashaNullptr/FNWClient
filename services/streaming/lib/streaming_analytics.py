@@ -1,15 +1,13 @@
 import asyncio
 from datetime import datetime
 from dateutil import tz
-import re
 
 from telethon import TelegramClient, events, utils
 from telethon.sessions import StringSession
 
-from textblob import TextBlob
-
 from prometheus_client import Gauge, Histogram
 
+from services.streaming.lib.text_blob_sentiment import text_sentiment
 import logging
 logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',level=logging.DEBUG)
 
@@ -56,14 +54,6 @@ class StreamingAnalytics:
 
         :param event: a new message.
         """
-
-        def text_sentiment(text):
-
-            def clean_text(text):
-                return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", text).split())
-
-            cln_text = clean_text(text)
-            return None if not cln_text else TextBlob(cln_text).sentiment.polarity
 
         sentiment = text_sentiment(event.raw_text)
 
