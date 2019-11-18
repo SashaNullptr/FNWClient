@@ -1,7 +1,7 @@
 from telethon.sync import TelegramClient
 from telethon.sessions import StringSession
 
-from services.streaming.config import collect_env_vars
+from services.streaming.config.env_vars import collect_env_vars
 
 
 def get_session(api_id, api_hash):
