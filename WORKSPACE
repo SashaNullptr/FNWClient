@@ -23,6 +23,13 @@ container_deps()
 load("@io_bazel_rules_docker//container:container.bzl", "container_pull")
 
 container_pull(
+    name = "dockerhub_python_3_6_image_base",
+    digest = "sha256:8d2d8e29d0367e3a905285d458effae7b1096920b8ce49bdeedf9f1d81881331",  # 3.6-slim
+    registry = "index.docker.io",
+    repository = "library/python",
+)
+
+container_pull(
     name = "dockerhub_python_3_7_image_base",
     digest = "sha256:fc754aafacf5ad737f1e313cbd3f7cfedf08cbc713927a9e27683b7210a0aabd",  # 3.7-slim
     registry = "index.docker.io",
