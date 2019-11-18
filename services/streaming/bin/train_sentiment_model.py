@@ -7,6 +7,8 @@ from flair.datasets import ClassificationCorpus
 
 from pathlib import Path
 
+import flair, torch
+flair.device = torch.device('cpu')
 
 def train_sentiment_model(root_dir):
 
