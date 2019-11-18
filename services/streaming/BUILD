@@ -23,6 +23,7 @@ py_library(
         "@fnw_streaming_deps//prometheus_client",
         "@fnw_streaming_deps//python_dateutil",
         "@fnw_streaming_deps//telethon",
+        "@fnw_streaming_deps//flair",
         "@fnw_streaming_deps//textblob",
         "@fnw_streaming_deps//waitress",
     ],
@@ -33,7 +34,7 @@ load("@io_bazel_rules_docker//python3:image.bzl", "py3_image")
 py3_image(
     name = "server",
     srcs = ["server.py"],
-    base = "//thirdparty/containers:python_3_7_image_base",
+    base = "//thirdparty/containers:python_3_6_image_base",
     main = "server.py",
     visibility = ["//visibility:public"],
     deps = [":streaming"],

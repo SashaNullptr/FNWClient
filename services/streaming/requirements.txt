@@ -1,4 +1,5 @@
 python-dateutil
+flair
 textblob
 telethon
 flask
