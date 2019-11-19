@@ -4,19 +4,25 @@
 
 ### Building the Training Image
 
+Model training is handled via a custom Docker container. In order to produce this container run:
+
 ```shell script
-bazel build //...
+bazel run //services/streaming/bin:model_training
 ```
 
+This will produce a Docker image named `fnwclient_streaming_model_training` with the tag `latest` on the local system.
+
 ### General Syntax
+
+Now that we've built the container we will use it using the following general syntax.
 
 ```shell script
 docker run -ti --rm \
   -e NVIDIA_VISIBLE_DEVICES=all \
   --runtime=nvidia \
-  -v <host training data path>:/opt/data/input \
-  -v <host output path>:/opt/data/output \
-  <image>:<tag> \
+  -v <host training data path>:<container training data path> \
+  -v <host output path>:<container output path> \
+  fnwclient_streaming_model_training:latest \
   <opts>
 ```
 
