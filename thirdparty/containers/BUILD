@@ -24,7 +24,6 @@ container_image(
     name = "cuda_10_1_image_base",
     base = "@model_training_base//image:dockerfile_image.tar",
     symlinks = {
-        "/usr/bin/python": "/usr/local/bin/python",
         "/usr/bin/python": "/usr/bin/python3",
     },
     env = {
