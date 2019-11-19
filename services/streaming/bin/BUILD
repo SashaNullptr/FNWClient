@@ -30,6 +30,6 @@ load("@io_bazel_rules_docker//container:container.bzl", "container_bundle")
 container_bundle(
     name = "model_training",
     images = {
-        "fnwclient-streaming-model-training:latest": ":train_sentiment_model",
+        "flair-model-training:latest": ":train_sentiment_model",
     },
 )
