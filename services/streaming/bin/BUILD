@@ -16,11 +16,9 @@ load("@io_bazel_rules_docker//python3:image.bzl", "py3_image")
 py3_image(
     name = "train_sentiment_model",
     srcs = ["train_sentiment_model.py"],
-    base = "//thirdparty/containers:python_3_6_image_base",
+    base = "//thirdparty/containers:cuda_10_1_image_base",
     main = "train_sentiment_model.py",
     visibility = ["//visibility:public"],
     deps = [
         "@fnw_streaming_deps//torch",
         "@fnw_streaming_deps//flair"
-    ],
-)
