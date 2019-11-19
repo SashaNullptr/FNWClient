@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Push Flair Training to Dockerhub" type="BlazeCommandRunConfigurationType" factoryName="Bazel Command">
+    <blaze-settings blaze-command="run" handler-id="BlazeCommandGenericRunConfigurationHandlerProvider">
+      <env_state>
+        <envs />
+      </env_state>
+      <blaze-target>//services/streaming/bin:push</blaze-target>
+    </blaze-settings>
+    <method v="2">
+      <option name="Blaze.BeforeRunTask" enabled="true" />
+    </method>
+  </configuration>
+</component>
