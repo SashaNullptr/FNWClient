@@ -22,3 +22,14 @@ py3_image(
     deps = [
         "@fnw_streaming_deps//torch",
         "@fnw_streaming_deps//flair"
+    ]
+)
+
+load("@io_bazel_rules_docker//container:container.bzl", "container_bundle")
+
+container_bundle(
+    name = "model_training",
+    images = {
+        "fnwclient_streaming_model_training:latest": ":train_sentiment_model",
+    },
+)
