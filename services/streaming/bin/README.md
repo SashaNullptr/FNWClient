@@ -86,9 +86,9 @@ Then we would run the following command to train a model using the training cont
 docker run -ti --rm \
     -e NVIDIA_VISIBLE_DEVICES=all \
     --runtime=nvidia \
-    -v ./data_set:/opt/data/input \
-    -v ./output:/opt/data/output \
-    train_sentiment_model:latest \
+    --mount src=`pwd`/data_sets,target=/opt/data/input,type=bind \
+    --mount src=`pwd`/output,target=/opt/data/output,type=bind \
+    fnwclient_streaming_model_training:latest \
     --rootdir "/opt/data/input" \
     --outdir "/opt/data/output"  \
     --train "train.txt" \
