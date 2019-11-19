@@ -28,15 +28,15 @@ docker run -ti --rm \
 
 The container supports the following options.
 
-| Option | Description | Example |
-|---------|------------|---------|
-| --rootdir | Path to data set root directory _in the container_. | "/opt/data/input" |
-| --outdir| Path to model output directory _in the container_. | "/opt/data/output" |
-| --train | Training dataset file name (without path) | "train.txt" |
-| --dev| Dev dataset file name (without path) | "dev.txt" |
-| --test| Test dataset file name (without path) | "test.txt" |
-| --epochs| Maximum number of Epochs| 25 |
-| --device | Compute device to use| "cuda:0" |
+| Option    | Description                                         | Example            |
+|-----------|-----------------------------------------------------|--------------------|
+| --rootdir | Path to data set root directory _in the container_. | "/opt/data/input"  |
+| --outdir  | Path to model output directory _in the container_.  | "/opt/data/output" |
+| --train   | Training dataset file name (without path)           | "train.txt"        |
+| --dev     | Dev dataset file name (without path)                | "dev.txt"          |
+| --test    | Test dataset file name (without path)               | "test.txt"         |
+| --epochs  | Maximum number of Epochs                            | 25                 |
+| --device  | Compute device to use                               | "cuda:0"           |
 
 To find out which compute devices are valid on your system run `docker run -ti --rm <image>:<tag> --help`, which will display
 something similar to the following
