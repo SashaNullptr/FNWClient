@@ -30,6 +30,6 @@ load("@io_bazel_rules_docker//container:container.bzl", "container_bundle")
 container_bundle(
     name = "model_training",
     images = {
-        "fnwclient_streaming_model_training:latest": ":train_sentiment_model",
+        "fnwclient-streaming-model-training:latest": ":train_sentiment_model",
     },
 )

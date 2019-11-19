@@ -10,7 +10,7 @@ Model training is handled via a custom Docker container. In order to produce thi
 bazel run //services/streaming/bin:model_training
 ```
 
-This will produce a Docker image named `fnwclient_streaming_model_training` with the tag `latest` on the local system.
+This will produce a Docker image named `fnwclient-streaming-model-training` with the tag `latest` on the local system.
 
 ### General Syntax
 
@@ -22,7 +22,7 @@ docker run -ti --rm \
   --runtime=nvidia \
   -v <host training data path>:<container training data path> \
   -v <host output path>:<container output path> \
-  fnwclient_streaming_model_training:latest \
+  fnwclient-streaming-model-training:latest \
   <opts>
 ```
 
@@ -88,7 +88,7 @@ docker run -ti --rm \
     --runtime=nvidia \
     --mount src=`pwd`/data_sets,target=/opt/data/input,type=bind \
     --mount src=`pwd`/output,target=/opt/data/output,type=bind \
-    fnwclient_streaming_model_training:latest \
+    fnwclient-streaming-model-training:latest \
     --rootdir "/opt/data/input" \
     --outdir "/opt/data/output"  \
     --train "train.txt" \
