@@ -59,12 +59,6 @@ pip_rules_dependencies()
 load("@com_apt_itude_rules_pip//rules:repository.bzl", "pip_repository")
 
 pip_repository(
-    name = "fnwclient_deps",
-    python_interpreter = "python3",
-    requirements = "//thirdparty/dependencies:requirements.txt",
-)
-
-pip_repository(
     name = "fnw_streaming_deps",
     python_interpreter = "python3",
     requirements = "//services/streaming:requirements.txt",
