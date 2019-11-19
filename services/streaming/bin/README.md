@@ -18,12 +18,12 @@ Now that we've built the container we will use it using the following general sy
 
 ```shell script
 docker run -ti --rm \
-  -e NVIDIA_VISIBLE_DEVICES=all \
-  --runtime=nvidia \
-  -v <host training data path>:<container training data path> \
-  -v <host output path>:<container output path> \
-  flair-model-training:latest \
-  <opts>
+    -e NVIDIA_VISIBLE_DEVICES=all \
+    --runtime=nvidia \
+    --mount src=<host training data path>,target=<container training data path>,type=bind \
+    --mount src=<host output path>,target=<container output path>,type=bind \
+    flair-model-training:latest \
+    <opts>
 ```
 
 The container supports the following options.
