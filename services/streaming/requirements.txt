@@ -8,3 +8,4 @@ waitress
 prometheus_client
 injector
 torch
+allennlp

@@ -21,6 +21,7 @@ py3_image(
     visibility = ["//visibility:public"],
     deps = [
         "@fnw_streaming_deps//torch",
+        "@fnw_streaming_deps//allennlp",
         "@fnw_streaming_deps//flair"
     ]
 )
