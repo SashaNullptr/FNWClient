@@ -228,6 +228,35 @@ and run analytics.</p>
 </div>
 <div class="section" id="implementation-documentation">
 <h2>Implementation Documentation<a class="headerlink" href="#implementation-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="services.streaming.lib.StreamingAnalytics">
+<em class="property">class </em><code class="sig-prename descclassname">services.streaming.lib.</code><code class="sig-name descname">StreamingAnalytics</code><span class="sig-paren">(</span><em class="sig-param">api_id</em>, <em class="sig-param">api_hash</em>, <em class="sig-param">session</em><span class="sig-paren">)</span><a class="headerlink" href="#services.streaming.lib.StreamingAnalytics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log information about events as they happen</p>
+<dl class="method">
+<dt id="services.streaming.lib.StreamingAnalytics.log_sentiment">
+<em class="property">async </em><code class="sig-name descname">log_sentiment</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="headerlink" href="#services.streaming.lib.StreamingAnalytics.log_sentiment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log sentiment of currently received message to a Prometheus gauge.</p>
+<p>If the current message contains no valid text, do nothing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>event</strong> – a new message.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="services.streaming.lib.StreamingAnalytics.log_time">
+<em class="property">async </em><code class="sig-name descname">log_time</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="headerlink" href="#services.streaming.lib.StreamingAnalytics.log_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log time that a current message was received to a Prometheus Historgram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>event</strong> – a new message.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 
