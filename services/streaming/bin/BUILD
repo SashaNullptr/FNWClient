@@ -34,3 +34,14 @@ container_bundle(
         "flair-model-training:latest": ":train_sentiment_model",
     },
 )
+
+load("@io_bazel_rules_docker//container:container.bzl", "container_push")
+
+container_push(
+    name = "push",
+    format = "Docker",
+    image = ":train_sentiment_model",
+    registry = "index.docker.io",
+    repository = "sashanullptr/flair-model-training",
+    tag = "latest",
+)
