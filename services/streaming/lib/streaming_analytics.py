@@ -7,8 +7,7 @@ from telethon.sessions import StringSession
 
 from prometheus_client import Gauge, Histogram
 
-from services.streaming.lib.text_blob_sentiment import text_sentiment
-from services.streaming.lib.flair_sentiment import FlairTextSentiment
+from services.streaming.lib.clean_text import SentimentScoreModel
 
 import logging
 logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',level=logging.DEBUG)
@@ -38,7 +37,7 @@ class StreamingAnalytics:
             ["user"]
         )
 
-        self.__model = FlairTextSentiment()
+        self.__model = SentimentScoreModel()
 
     def init_client(self):
 
@@ -59,7 +58,7 @@ class StreamingAnalytics:
         :param event: a new message.
         """
 
-        sentiment = self.__model.text_sentiment(event.raw_text)
+        sentiment = self.__model.sentiment_score(event.raw_text)
 
         logging.debug("Got the following message: \"" + event.raw_text + "\" with sentiment score " + str(sentiment))
 
