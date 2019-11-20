@@ -12,6 +12,7 @@ from services.streaming.config import collect_env_vars
 logger = logging.getLogger('waitress')
 logger.setLevel(logging.INFO)
 
+
 def start_analytics():
     asyncio.set_event_loop(asyncio.new_event_loop())
     creds = collect_env_vars("API_ID", "API_HASH", "SESSION")
