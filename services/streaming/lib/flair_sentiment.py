@@ -1,4 +1,5 @@
 import re
+from os import environ
 
 # Some of flair's dependencies *require* Python 3.6
 from flair.data import Sentence
@@ -14,8 +15,13 @@ from services.streaming.lib.clean_text import clean_text
 
 class FlairTextSentiment:
 
-    def __init__(self):
-        self.__model = TextClassifier.load('en-sentiment')
+    def __init__(self, model_location):
+        model_location = environ.getenv('SENTIMENT_MODEL', "/opt/models/sentiment/best-model.pt")
+
+        if not model_location.exists():
+            raise FileNotFoundError( "Could Flair model at " + str(model_location) )
+
+        self.__model = TextClassifier.load(model_location)
 
     # By default label objects represent a score as either value:<str> score:<float>
     # where value is either "POSITIVE" or "NEGATIVE"
