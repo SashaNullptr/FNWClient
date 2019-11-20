@@ -1,5 +1,5 @@
 import re
-from os import environ
+from pathlib import Path
 
 # Some of flair's dependencies *require* Python 3.6
 from flair.data import Sentence
@@ -11,17 +11,21 @@ from services.streaming.lib.clean_text import clean_text
 # https://s3.eu-central-1.amazonaws.com/alan-nlp/resources/models-v0.4/classy-imdb-en-rnn-cuda%3A0/imdb-v0.4.pt
 # If this model isn't loaded in advance it will take 5-ish minutes to download
 # Model is saved in ~/.flair/models by default
+import flair, torch
 
 
 class FlairTextSentiment:
 
     def __init__(self, model_location):
-        model_location = environ.getenv('SENTIMENT_MODEL', "/opt/models/sentiment/best-model.pt")
+        model_path = Path(model_location)
 
-        if not model_location.exists():
-            raise FileNotFoundError( "Could Flair model at " + str(model_location) )
+        if not model_path.exists():
+            raise FileNotFoundError( "Could Flair model at " + str(model_path) )
 
-        self.__model = TextClassifier.load(model_location)
+        self.__model = TextClassifier.load(model_path)
+
+        # Our image doesn't currently support GPU passthrough--so don't bother trying.
+        flair.device = torch.device('cpu')
 
     # By default label objects represent a score as either value:<str> score:<float>
     # where value is either "POSITIVE" or "NEGATIVE"
@@ -31,12 +35,20 @@ class FlairTextSentiment:
         sentence = Sentence(text)
         self.__model.predict(sentence)
 
-        score = sentence.labels[0].score
+        score = sentence.labels[0].score # Confidence score
+        value = sentence.labels[0].value # Sentiment value
 
-        value = sentence.labels[0].value
-        sign = 1 if (value == "POSITIVE") else -1
+        # Value labels will be on the following scale
+        # 1: Strongly Negative
+        # 2: Weakly Negative
+        # 3: Neutral
+        # 4: Weakly Positive
+        # 5: Strongly Positive
+        # We'll convert to a [1,-1] score for simplicity
 
-        return sign*score
+        sentiment = 2*((value-1)/4 - 0.5)
+
+        return sentiment
 
     def text_sentiment(self, text):
 
