@@ -7,7 +7,7 @@ from telethon.sessions import StringSession
 
 from prometheus_client import Gauge, Histogram
 
-from services.streaming.lib.clean_text import SentimentScoreModel
+from services.streaming.lib.sentiment_score import SentimentScoreModel
 
 import logging
 logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',level=logging.DEBUG)
