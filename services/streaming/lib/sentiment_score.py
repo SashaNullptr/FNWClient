@@ -24,4 +24,4 @@ class SentimentScoreModel:
             self.__score_function = self.__model.text_sentiment
 
     def sentiment_score(self, raw_text):
-        self.__score_function(raw_text)
+        return self.__score_function(raw_text)
