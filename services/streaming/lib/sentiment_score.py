@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class SentimentScoreModel:
 
     def __init__(self):
-        model_location = getenv('SENTIMENT_MODEL', "/opt/models/sentiment/best-model.pt")
+        model_location = getenv('SENTIMENT_MODEL', "/opt/models/sentiment/final-model.pt")
         model_path = Path(model_location)
 
         if not model_path.exists():

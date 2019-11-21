@@ -36,7 +36,7 @@ class FlairTextSentiment:
         self.__model.predict(sentence)
 
         score = sentence.labels[0].score # Confidence score
-        value = sentence.labels[0].value # Sentiment value
+        value = int(sentence.labels[0].value) # Sentiment value
 
         # Value labels will be on the following scale
         # 1: Strongly Negative

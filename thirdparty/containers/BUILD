@@ -31,7 +31,13 @@ container_image(
     }
 )
 
+
+container_image(
+    name = "streaming_analytics_base",
+    base = "cuda_10_1_image_base",
+)
+
 filegroup(
     name = "srcs",
-    srcs = ["BUILD"],
+    srcs = ["BUILD"]
 )
