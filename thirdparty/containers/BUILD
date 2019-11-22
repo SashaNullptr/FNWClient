@@ -34,7 +34,7 @@ container_image(
 
 container_image(
     name = "streaming_analytics_base",
-    base = "cuda_10_1_image_base",
+    base = "python_3_6_image_base",
 )
 
 filegroup(
